@@ -1,4 +1,6 @@
 import random
+import sys
+import time
 
 suits = ["suits", "clubs", "hearts", "diamonds"]
 ranks = ["A",2,3,4,5,6,7,8,9,10,"J","Q","K"]
@@ -38,6 +40,15 @@ def game_intro(): # The function to be ran at the start to introduce the game
         print "Welcome to pyJack, a game of blackjack made in Python"
         print "You will play against an AI dealer programmed like a professional"
         decision = str(raw_input("Shall we begin? (Yes/No)"))
+        if decision.upper() == "YES" or decision.upper() == "Y":
+                print "Good, let us start"
+        elif decision.upper() == "NO" or decision.upper() == "N":
+                print "Goodbye"
+                time.sleep(1)
+                sys.exit()
+        else:
+                print "I didn't understand"
+                game_intro()
         
 deck = new_deck()
 deck = shuffle_deck(deck)
