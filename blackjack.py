@@ -73,6 +73,7 @@ def print_hand(hand): # This function is ran to print the hand to the user
                         
 def score_hand(hand): # This function returns the score of the inputed hand
         score = 0
+        number_aces = 0
         for i in range(len(hand)):
                 rank = hand[i][1]
                 if rank == 'K':
@@ -82,9 +83,16 @@ def score_hand(hand): # This function returns the score of the inputed hand
                 elif rank == 'J':
                         score += 10
                 elif rank == 'A':
+                        number_aces += 1
                         score += 11
                 else:
                         score += rank
+        for i in range(number_aces):
+                if score > 21:
+                        score -= 10
+                        number_aces -= 1
+                else:
+                        number_aces -= 1
         return score
 deck = new_deck()
 deck = shuffle_deck(deck)
