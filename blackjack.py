@@ -54,7 +54,7 @@ def game_intro(): # This function is ran at the start to introduce the game
                 print ""
                 game_intro()       
 
-def print_hand(hand): # This function is ran to print the hand to the user and allow them to get a new card   
+def print_hand(hand): # This function is ran to print the hand to the user 
         print "Your hand contains:"
         print ""
         for i in range(len(hand)):
@@ -70,18 +70,6 @@ def print_hand(hand): # This function is ran to print the hand to the user and a
                         rank = "Ace"
                 print "%s of %s" % (rank, suit)
         print ""
-        if len(hand) < 5: # If there are less than 5 cards allow the user to add another card
-                decision = str(raw_input("Would you like another card? (Yes/No)"))
-                if decision.upper() == "YES" or decision.upper() == "Y":
-                        player_hand.append(deal_card(deck))
-                        print_hand(hand)
-                elif decision.upper() == "NO" or decision.upper() == "N":
-                        return
-                else:
-                        print "I'm sorry I didn't understand"
-                        print ""
-                        time.sleep(0.5)
-                        print_hand(hand)
                         
 deck = new_deck()
 deck = shuffle_deck(deck)
