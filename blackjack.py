@@ -71,10 +71,25 @@ def print_hand(hand): # This function is ran to print the hand to the user
                 print "%s of %s" % (rank, suit)
         print ""
                         
+def score_hand(hand): # This function returns the score of the inputed hand
+        score = 0
+        for i in range(len(hand)):
+                rank = hand[i][1]
+                if rank == 'K':
+                        score += 10
+                elif rank == 'Q':
+                        score += 10
+                elif rank == 'J':
+                        score += 10
+                elif rank == 'A':
+                        score += 11
+                else:
+                        score += rank
+        return score
 deck = new_deck()
 deck = shuffle_deck(deck)
 
 player_hand.append(deal_card(deck))
 player_hand.append(deal_card(deck))
 
-print_hand(player_hand)
+print score_hand(player_hand)
