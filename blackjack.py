@@ -54,7 +54,7 @@ def game_intro(): # This function is ran at the start to introduce the game
                 print ""
                 game_intro()       
 
-def print_hand(hand): # This function is ran to print the hand to the user 
+def print_hand(hand): # This function is ran to print the hand to the user as well as the score 
         print "Your hand contains:"
         print ""
         for i in range(len(hand)):
@@ -68,8 +68,9 @@ def print_hand(hand): # This function is ran to print the hand to the user
                         rank = "Jack"
                 elif rank == 'A':
                         rank = "Ace"
-                print "%s of %s" % (rank, suit)
+                print "%s of %s" % (rank, suit) 
         print ""
+        print "Your hand has a score of: %s" % (score_hand(hand))
                         
 def score_hand(hand): # This function returns the score of the inputed hand
         score = 0
@@ -87,17 +88,37 @@ def score_hand(hand): # This function returns the score of the inputed hand
                         score += 11
                 else:
                         score += rank
-        for i in range(number_aces):
-                if score > 21:
+        for i in range(number_aces): # This loop will only be executed for each ace in the hand
+                if score > 21: # If the score is greater than 21 then we want to remove 10
                         score -= 10
                         number_aces -= 1
                 else:
                         number_aces -= 1
         return score
+
+def stick_twist(hand): # This function will show the user the cards and ask them to stick or twist
+        print_hand(hand)
+        if score_hand(hand) == 21:
+                print "You have the maximum score of 21"
+        elif score_hand(hand) > 21:
+                print "You're bust"
+        else:
+                decision = raw_input("Stick or Twist?")
+                if decision.upper() == "TWIST":
+                        hand.append(deal_card(deck))
+                        stick_twist(hand)
+                elif decision.upper() == "STICK":
+                        print "Stuck"
+                else:
+                        print "I'm sorry I didn't understand"
+                        print ""
+                        time.sleep(0.5)
+                        stick_twist(hand)
+                
 deck = new_deck()
 deck = shuffle_deck(deck)
 
 player_hand.append(deal_card(deck))
 player_hand.append(deal_card(deck))
 
-print score_hand(player_hand)
+stick_twist(player_hand)
