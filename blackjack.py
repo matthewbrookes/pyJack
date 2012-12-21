@@ -104,21 +104,33 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                 print "You're bust"
         else:
                 decision = raw_input("Stick or Twist?")
-                if decision.upper() == "TWIST":
+                if decision.upper() == "TWIST" or decision.upper() == "T":
                         hand.append(deal_card(deck))
                         stick_twist(hand)
-                elif decision.upper() == "STICK":
+                elif decision.upper() == "STICK" or decision.upper() == "S":
                         print "Stuck"
                 else:
                         print "I'm sorry I didn't understand"
                         print ""
                         time.sleep(0.5)
                         stick_twist(hand)
-                
+
+def dealer_decision(hand): # This function will act as a basic dealer
+        if score_hand(hand) >= 17:
+                return
+        else:
+                dealer_hand.append(deal_card(deck))
+                dealer_decision(dealer_hand)
+
 deck = new_deck()
 deck = shuffle_deck(deck)
 
 player_hand.append(deal_card(deck))
 player_hand.append(deal_card(deck))
+dealer_hand.append(deal_card(deck))
+dealer_hand.append(deal_card(deck))
 
-stick_twist(player_hand)
+#game_intro()
+#stick_twist(player_hand)
+dealer_decision(dealer_hand)
+print score_hand(dealer_hand)
