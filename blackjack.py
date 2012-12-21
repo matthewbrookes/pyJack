@@ -22,7 +22,7 @@ def new_deck(): # This function creates a deck of 52 cards
                         card = [] # Resets card array for next iteration
         return deck
                         
-def shuffle_deck(deck): # This function shuffles inputed deck
+def shuffle_deck(deck): # This function shuffles inputted deck
         new_deck = []
         random_index = []
         for i in range(52): # For every card
@@ -33,7 +33,7 @@ def shuffle_deck(deck): # This function shuffles inputed deck
                 random_index.remove(r) # Removes the random number from random_index
         return new_deck        
                 
-def deal_card(deck): # This function returns a random card from inputed deck and removes it from deck
+def deal_card(deck): # This function returns a random card from inputted deck and removes it from deck
         rIndex = random.randint(0,len(deck)-1)
         c = deck[rIndex]
         deck.remove(deck[rIndex])
@@ -72,7 +72,7 @@ def print_hand(hand): # This function is ran to print the hand to the user as we
         print ""
         print "Your hand has a score of: %s" % (score_hand(hand))
                         
-def score_hand(hand): # This function returns the score of the inputed hand
+def score_hand(hand): # This function returns the score of the inputted hand
         score = 0
         number_aces = 0
         for i in range(len(hand)):
@@ -101,7 +101,7 @@ def stick_twist(hand): # This function will show the user the cards and ask them
         if score_hand(hand) == 21:
                 print "You have the maximum score of 21"
         elif score_hand(hand) > 21:
-                print "You're bust"
+                return
         else:
                 decision = raw_input("Stick or Twist?")
                 if decision.upper() == "TWIST" or decision.upper() == "T":
@@ -122,6 +122,19 @@ def dealer_decision(hand): # This function will act as a basic dealer
                 dealer_hand.append(deal_card(deck))
                 dealer_decision(dealer_hand)
 
+def find_winner(pHand, dHand):
+        if score_hand(pHand) > 21:
+                print "You're bust. You lose."
+        elif score_hand(dHand) > 21:
+                print "Dealer is bust. You win."
+        elif score_hand(dHand) == score_hand(pHand):
+                print "You both score %s. You push." % (score_hand(pHand))
+        else:
+                if score_hand(pHand) > score_hand(dHand):
+                        print "You score %s, dealer scores %s. You win." % (score_hand(pHand), score_hand(dHand))
+                else:
+                        print "You score %s, dealer scores %s. You lose." % (score_hand(pHand), score_hand(dHand))
+
 deck = new_deck()
 deck = shuffle_deck(deck)
 
@@ -131,6 +144,6 @@ dealer_hand.append(deal_card(deck))
 dealer_hand.append(deal_card(deck))
 
 #game_intro()
-#stick_twist(player_hand)
+stick_twist(player_hand)
 dealer_decision(dealer_hand)
-print score_hand(dealer_hand)
+find_winner(player_hand, dealer_hand)
