@@ -135,6 +135,21 @@ def find_winner(pHand, dHand):
                 else:
                         print "You score %s, dealer scores %s. You lose." % (score_hand(pHand), score_hand(dHand))
 
+def play_again():
+        print ""
+        decision = raw_input("Wow, that was fun. Do you want to play again? (Yes/No)")
+        if decision.upper() == "YES" or decision.upper() == "Y":
+                print "Good, let us start"
+                return True
+        elif decision.upper() == "NO" or decision.upper() == "N":
+                print "Goodbye"
+                time.sleep(0.5)
+                sys.exit()
+        else:
+                print "I'm sorry I didn't understand"
+                print ""
+                play_again()  
+
 deck = new_deck()
 deck = shuffle_deck(deck)
 
@@ -143,7 +158,10 @@ player_hand.append(deal_card(deck))
 dealer_hand.append(deal_card(deck))
 dealer_hand.append(deal_card(deck))
 
-#game_intro()
-stick_twist(player_hand)
-dealer_decision(dealer_hand)
-find_winner(player_hand, dealer_hand)
+game_intro()
+play = True
+while play:
+        stick_twist(player_hand)
+        dealer_decision(dealer_hand)
+        find_winner(player_hand, dealer_hand)
+        play = play_again()
