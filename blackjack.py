@@ -4,7 +4,7 @@ import random
 import sys
 import time
 
-suits = ["suits", "clubs", "hearts", "diamonds"]
+suits = ["spades", "clubs", "hearts", "diamonds"]
 ranks = ["A",2,3,4,5,6,7,8,9,10,"J","Q","K"]
 player_hand = []
 dealer_hand = []
@@ -165,3 +165,12 @@ while play:
         dealer_decision(dealer_hand)
         find_winner(player_hand, dealer_hand)
         play = play_again()
+        deck = new_deck()
+        deck = shuffle_deck(deck)
+        player_hand = []
+        dealer_hand = []
+        player_hand.append(deal_card(deck))
+        player_hand.append(deal_card(deck))
+        dealer_hand.append(deal_card(deck))
+        dealer_hand.append(deal_card(deck))
+
