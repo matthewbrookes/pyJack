@@ -9,6 +9,8 @@ ranks = ["A",2,3,4,5,6,7,8,9,10,"J","Q","K"]
 player_hand = []
 dealer_hand = []
 
+
+
 def new_deck(): # This function creates a deck of 52 cards
         deck = []
         for i in range(4): # Iterates over number of suits in classic deck
@@ -21,7 +23,7 @@ def new_deck(): # This function creates a deck of 52 cards
                         deck.append(card) # Appends the card to the deck array
                         card = [] # Resets card array for next iteration
         return deck
-                        
+        
 def shuffle_deck(deck): # This function shuffles inputted deck
         new_deck = []
         random_index = []
@@ -31,29 +33,14 @@ def shuffle_deck(deck): # This function shuffles inputted deck
                 r = random_index[random.randint(0, len(random_index)-1)] # Selects a random value from random_index array
                 new_deck.append(deck[r]) # Adds a random card to the new_deck array
                 random_index.remove(r) # Removes the random number from random_index
-        return new_deck        
-                
+        return new_deck      
+        
 def deal_card(deck): # This function returns a random card from inputted deck and removes it from deck
         rIndex = random.randint(0,len(deck)-1)
         c = deck[rIndex]
         deck.remove(deck[rIndex])
         return c
         
-def game_intro(): # This function is ran at the start to introduce the game
-        print "Welcome to pyJack, a game of blackjack made in Python"
-        print "You will play against an AI dealer programmed like a professional"
-        decision = str(raw_input("Shall we begin? (Yes/No)"))
-        if decision.upper() == "YES" or decision.upper() == "Y":
-                print "Good, let us start"
-        elif decision.upper() == "NO" or decision.upper() == "N":
-                print "Goodbye"
-                time.sleep(0.5)
-                sys.exit()
-        else:
-                print "I'm sorry I didn't understand"
-                print ""
-                game_intro()       
-
 def print_hand(hand): # This function is ran to print the hand to the user as well as the score 
         print "Your hand contains:"
         print ""
@@ -71,7 +58,7 @@ def print_hand(hand): # This function is ran to print the hand to the user as we
                 print "%s of %s" % (rank, suit) 
         print ""
         print "Your hand has a score of: %s" % (score_hand(hand))
-                        
+        
 def score_hand(hand): # This function returns the score of the inputted hand
         score = 0
         number_aces = 0
@@ -94,8 +81,23 @@ def score_hand(hand): # This function returns the score of the inputted hand
                         number_aces -= 1
                 else:
                         number_aces -= 1
-        return score
-
+        return score        
+        
+def game_intro(): # This function is ran at the start to introduce the game
+        print "Welcome to pyJack, a game of blackjack made in Python"
+        print "You will play against an AI dealer programmed like a professional"
+        decision = str(raw_input("Shall we begin? (Yes/No)"))
+        if decision.upper() == "YES" or decision.upper() == "Y":
+                print "Good, let us start"
+        elif decision.upper() == "NO" or decision.upper() == "N":
+                print "Goodbye"
+                time.sleep(0.5)
+                sys.exit()
+        else:
+                print "I'm sorry I didn't understand"
+                print ""
+                game_intro()       
+                        
 def stick_twist(hand): # This function will show the user the cards and ask them to stick or twist
         print_hand(hand)
         if score_hand(hand) == 21:
@@ -106,9 +108,10 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                 decision = raw_input("Stick or Twist?")
                 if decision.upper() == "TWIST" or decision.upper() == "T":
                         hand.append(deal_card(deck))
+                        print "You Twist."
                         stick_twist(hand)
                 elif decision.upper() == "STICK" or decision.upper() == "S":
-                        print "Stuck"
+                        print "You stick."
                 else:
                         print "I'm sorry I didn't understand"
                         print ""
@@ -122,7 +125,7 @@ def dealer_decision(hand): # This function will act as a basic dealer
                 dealer_hand.append(deal_card(deck))
                 dealer_decision(dealer_hand)
 
-def find_winner(pHand, dHand):
+def find_winner(pHand, dHand): # This function checks to see what the outcome of the game is
         if score_hand(pHand) > 21:
                 print "You're bust. You lose."
         elif score_hand(dHand) > 21:
@@ -135,7 +138,7 @@ def find_winner(pHand, dHand):
                 else:
                         print "You score %s, dealer scores %s. You lose." % (score_hand(pHand), score_hand(dHand))
 
-def play_again():
+def play_again(): # This functions asks the user whether to play another hand
         print ""
         decision = raw_input("Wow, that was fun. Do you want to play again? (Yes/No)")
         if decision.upper() == "YES" or decision.upper() == "Y":
@@ -155,22 +158,30 @@ deck = shuffle_deck(deck)
 
 player_hand.append(deal_card(deck))
 player_hand.append(deal_card(deck))
+
 dealer_hand.append(deal_card(deck))
 dealer_hand.append(deal_card(deck))
 
 game_intro()
 play = True
+
 while play:
+        # These are the main functions of the game 
         stick_twist(player_hand)
         dealer_decision(dealer_hand)
         find_winner(player_hand, dealer_hand)
         play = play_again()
+        
+        # The next section resets the deck and creates new hands for the user and deaker
         deck = new_deck()
         deck = shuffle_deck(deck)
+        
         player_hand = []
         dealer_hand = []
+        
         player_hand.append(deal_card(deck))
         player_hand.append(deal_card(deck))
+        
         dealer_hand.append(deal_card(deck))
         dealer_hand.append(deal_card(deck))
 
