@@ -8,7 +8,8 @@ suits = ["spades", "clubs", "hearts", "diamonds"]
 ranks = ["A",2,3,4,5,6,7,8,9,10,"J","Q","K"]
 player_hand = []
 dealer_hand = []
-
+HOUSELIMIT = 20
+player_chips = 200
 
 
 def new_deck(): # This function creates a deck of 52 cards
@@ -98,6 +99,22 @@ def game_intro(): # This function is ran at the start to introduce the game
                 print ""
                 game_intro()       
                         
+def make_bet(): # This function will ask the user how much to bet this hand  
+        print "You have %s chips." % (player_chips)
+        print "The house allows a maximum bet of %s chips" % (HOUSELIMIT)
+        bet = raw_input("How much will you bet?")
+        try:
+                bet = int(bet)
+        except ValueError:
+                print "Please enter a whole number"
+                time.sleep(0.5)
+                make_bet()
+        if bet < 1 or bet > HOUSELIMIT:
+                print "Please enter an amount between 1 and " + str(HOUSELIMIT)
+                time.sleep(0.5)
+                make_bet()
+        return bet
+
 def stick_twist(hand): # This function will show the user the cards and ask them to stick or twist
         print_hand(hand)
         if score_hand(hand) == 21:
@@ -161,9 +178,10 @@ player_hand.append(deal_card(deck))
 
 dealer_hand.append(deal_card(deck))
 dealer_hand.append(deal_card(deck))
-
+player_bet = make_bet()
 game_intro()
 play = True
+
 
 while play:
         # These are the main functions of the game 
