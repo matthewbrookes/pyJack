@@ -122,8 +122,29 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                 return
         elif score_hand(hand) > 21:
                 return
+        elif len(hand) == 2:
+                decision = raw_input("Stick(S), Twist(T) or Double Down(DD)?")
+                if decision.upper() == "DOUBLE" or decision.upper() == "DOUBLE DOWN" or decision.upper() == "DD" or decision.upper() == "D":
+                        global player_bet
+                        print "You double down"
+                        hand.append(deal_card(deck))
+                        player_bet *= 2
+                        return
+                        
+                elif decision.upper() == "TWIST" or decision.upper() == "T":
+                        hand.append(deal_card(deck))
+                        print "You Twist."
+                        stick_twist(hand)
+                elif decision.upper() == "STICK" or decision.upper() == "S":
+                        print "You stick."
+                        return
+                else:
+                        print "I'm sorry I didn't understand"
+                        print ""
+                        time.sleep(0.5)
+                        stick_twist(hand)
         else:
-                decision = raw_input("Stick or Twist?")
+                decision = raw_input("Stick(S) or Twist(T)?")
                 if decision.upper() == "TWIST" or decision.upper() == "T":
                         hand.append(deal_card(deck))
                         print "You Twist."
