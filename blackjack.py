@@ -119,6 +119,7 @@ def stick_twist(hand): # This function will show the user the cards and ask them
         print_hand(hand)
         if score_hand(hand) == 21:
                 print "You have the maximum score of 21"
+                return
         elif score_hand(hand) > 21:
                 return
         else:
@@ -129,6 +130,7 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                         stick_twist(hand)
                 elif decision.upper() == "STICK" or decision.upper() == "S":
                         print "You stick."
+                        return
                 else:
                         print "I'm sorry I didn't understand"
                         print ""
@@ -143,17 +145,23 @@ def dealer_decision(hand): # This function will act as a basic dealer
                 dealer_decision(dealer_hand)
 
 def find_winner(pHand, dHand): # This function checks to see what the outcome of the game is
+        global player_chips
+        global player_bet
         if score_hand(pHand) > 21:
                 print "You're bust. You lose."
+                player_chips -= player_bet
         elif score_hand(dHand) > 21:
                 print "Dealer is bust. You win."
+                player_chips += player_bet
         elif score_hand(dHand) == score_hand(pHand):
                 print "You both score %s. You push." % (score_hand(pHand))
         else:
                 if score_hand(pHand) > score_hand(dHand):
                         print "You score %s, dealer scores %s. You win." % (score_hand(pHand), score_hand(dHand))
+                        player_chips += player_bet
                 else:
                         print "You score %s, dealer scores %s. You lose." % (score_hand(pHand), score_hand(dHand))
+                        player_chips -= player_bet
 
 def play_again(): # This functions asks the user whether to play another hand
         print ""
@@ -178,13 +186,13 @@ player_hand.append(deal_card(deck))
 
 dealer_hand.append(deal_card(deck))
 dealer_hand.append(deal_card(deck))
-player_bet = make_bet()
 game_intro()
 play = True
 
 
 while play:
         # These are the main functions of the game 
+        player_bet = make_bet()
         stick_twist(player_hand)
         dealer_decision(dealer_hand)
         find_winner(player_hand, dealer_hand)
@@ -202,4 +210,5 @@ while play:
         
         dealer_hand.append(deal_card(deck))
         dealer_hand.append(deal_card(deck))
+        
 
