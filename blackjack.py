@@ -108,17 +108,21 @@ def make_bet(): # This function will ask the user how much to bet this hand
         except ValueError:
                 print "Please enter a whole number"
                 time.sleep(0.5)
-                make_bet()
+                return make_bet()
         if bet < 1 or bet > HOUSELIMIT:
                 print "Please enter an amount between 1 and " + str(HOUSELIMIT)
                 time.sleep(0.5)
-                make_bet()
-        return bet
+                return make_bet()
+        else:
+                return bet
 
 def stick_twist(hand): # This function will show the user the cards and ask them to stick or twist
         print_hand(hand)
         if score_hand(hand) == 21:
-                print "You have the maximum score of 21"
+                if len(hand) == 2:
+                        print "You have blackjack. That pays out 1.5x."
+                else:
+                        print "You have the maximum score of 21"
                 return
         elif score_hand(hand) > 21:
                 return
@@ -147,7 +151,10 @@ def dealer_decision(hand): # This function will act as a basic dealer
 def find_winner(pHand, dHand): # This function checks to see what the outcome of the game is
         global player_chips
         global player_bet
-        if score_hand(pHand) > 21:
+        if score_hand(pHand) == 21 and len(pHand) == 2:
+                print "You earned %s chips for blackjack" % (str(int(round(player_bet * 1.5))))
+                player_chips += int(round(player_bet * 1.5))
+        elif score_hand(pHand) > 21:
                 print "You're bust. You lose."
                 player_chips -= player_bet
         elif score_hand(dHand) > 21:
@@ -191,6 +198,7 @@ play = True
 
 
 while play:
+        player_hand = [['diamonds', 'A'], ['clubs', 10]]
         # These are the main functions of the game 
         player_bet = make_bet()
         stick_twist(player_hand)
