@@ -101,20 +101,29 @@ def game_intro(): # This function is ran at the start to introduce the game
                         
 def make_bet(): # This function will ask the user how much to bet this hand  
         print "You have %s chips." % (player_chips)
-        print "The house allows a maximum bet of %s chips" % (HOUSELIMIT)
-        bet = raw_input("How much will you bet?")
-        try:
-                bet = int(bet)
-        except ValueError:
-                print "Please enter a whole number"
-                time.sleep(0.5)
-                return make_bet()
-        if bet < 1 or bet > HOUSELIMIT:
-                print "Please enter an amount between 1 and " + str(HOUSELIMIT)
-                time.sleep(0.5)
-                return make_bet()
+        if player_chips > 0:
+                print "The house allows a maximum bet of %s chips" % (HOUSELIMIT)
+                bet = raw_input("How much will you bet?")
+                try:
+                        bet = int(bet)
+                except ValueError:
+                        print "Please enter a whole number"
+                        time.sleep(0.5)
+                        return make_bet()
+                if bet < 1 or bet > HOUSELIMIT:
+                        print "Please enter an amount between 1 and " + str(HOUSELIMIT)
+                        time.sleep(0.5)
+                        return make_bet()
+                elif bet > player_chips:
+                        print "Please enter an amount between 1 and " + str(player_chips)
+                        return make_bet()
+                else:
+                        return bet
         else:
-                return bet
+                print "You have run out of chips"
+                print "pyJack will now close"
+                time.sleep(0.5)
+                sys.exit()
 
 def stick_twist(hand): # This function will show the user the cards and ask them to stick or twist
         print_hand(hand)
