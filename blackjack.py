@@ -133,6 +133,7 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                         print "You double down"
                         hand.append(deal_card(deck))
                         player_bet *= 2
+                        print_hand(hand)
                         return
                         
                 elif decision.upper() == "TWIST" or decision.upper() == "T":
