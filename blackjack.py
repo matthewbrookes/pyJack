@@ -198,7 +198,6 @@ play = True
 
 
 while play:
-        player_hand = [['diamonds', 'A'], ['clubs', 10]]
         # These are the main functions of the game 
         player_bet = make_bet()
         stick_twist(player_hand)
