@@ -8,7 +8,7 @@ suits = ["spades", "clubs", "hearts", "diamonds"]
 ranks = ["A",2,3,4,5,6,7,8,9,10,"J","Q","K"]
 player_hand = []
 dealer_hand = []
-HOUSELIMIT = 20
+HOUSELIMIT = 40
 player_chips = 200
 
 
