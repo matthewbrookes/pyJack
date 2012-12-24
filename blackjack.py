@@ -7,6 +7,7 @@ import time
 suits = ["spades", "clubs", "hearts", "diamonds"]
 ranks = ["A",2,3,4,5,6,7,8,9,10,"J","Q","K"]
 player_hand = []
+player_hand2 = []
 dealer_hand = []
 HOUSELIMIT = 40
 player_chips = 200
@@ -125,7 +126,7 @@ def make_bet(): # This function will ask the user how much to bet this hand
                 time.sleep(0.5)
                 sys.exit()
 
-def stick_twist(hand): # This function will show the user the cards and ask them to stick or twist
+def stick_twist(hand): # This function will show the user the cards and ask them to stick, twist double down or split
         print_hand(hand)
         if score_hand(hand) == 21:
                 if len(hand) == 2:
@@ -136,27 +137,57 @@ def stick_twist(hand): # This function will show the user the cards and ask them
         elif score_hand(hand) > 21:
                 return
         elif len(hand) == 2:
-                decision = raw_input("Stick(S), Twist(T) or Double Down(DD)?")
-                if decision.upper() == "DOUBLE" or decision.upper() == "DOUBLE DOWN" or decision.upper() == "DD" or decision.upper() == "D":
-                        global player_bet
-                        print "You double down"
-                        hand.append(deal_card(deck))
-                        player_bet *= 2
-                        print_hand(hand)
-                        return
-                        
-                elif decision.upper() == "TWIST" or decision.upper() == "T":
-                        hand.append(deal_card(deck))
-                        print "You Twist."
-                        stick_twist(hand)
-                elif decision.upper() == "STICK" or decision.upper() == "S":
-                        print "You stick."
-                        return
+                if hand[0][1] == hand[1][1]:
+                        decision = raw_input("Stick(S), Twist(T), Split(SP) or Double Down(DD)?")
+                        if decision.upper() == "DOUBLE" or decision.upper() == "DOUBLE DOWN" or decision.upper() == "DD" or decision.upper() == "D":
+                                global player_bet
+                                print "You double down"
+                                hand.append(deal_card(deck))
+                                player_bet *= 2
+                                print_hand(hand)
+                                return       
+                        elif decision.upper() == "TWIST" or decision.upper() == "T":
+                                hand.append(deal_card(deck))
+                                print "You Twist."
+                                stick_twist(hand)
+                        elif decision.upper() == "STICK" or decision.upper() == "S":
+                                print "You stick."
+                                return
+                        elif decision.upper() == "SPLIT" or decision.upper() == "SP":
+                                global player_hand2
+                                global player_hand
+                                player_hand2.append(hand[1])
+                                player_hand2.append(deal_card(deck))
+                                player_hand.remove(hand[1])
+                                player_hand.append(deal_card(deck))
+                                
+                        else:
+                                print "I'm sorry I didn't understand"
+                                print ""
+                                time.sleep(0.5)
+                                stick_twist(hand)
                 else:
-                        print "I'm sorry I didn't understand"
-                        print ""
-                        time.sleep(0.5)
-                        stick_twist(hand)
+                        decision = raw_input("Stick(S), Twist(T) or Double Down(DD)?")
+                        if decision.upper() == "DOUBLE" or decision.upper() == "DOUBLE DOWN" or decision.upper() == "DD" or decision.upper() == "D":
+                                global player_bet
+                                print "You double down"
+                                hand.append(deal_card(deck))
+                                player_bet *= 2
+                                print_hand(hand)
+                                return
+                                
+                        elif decision.upper() == "TWIST" or decision.upper() == "T":
+                                hand.append(deal_card(deck))
+                                print "You Twist."
+                                stick_twist(hand)
+                        elif decision.upper() == "STICK" or decision.upper() == "S":
+                                print "You stick."
+                                return
+                        else:
+                                print "I'm sorry I didn't understand"
+                                print ""
+                                time.sleep(0.5)
+                                stick_twist(hand)
         else:
                 decision = raw_input("Stick(S) or Twist(T)?")
                 if decision.upper() == "TWIST" or decision.upper() == "T":
@@ -229,9 +260,12 @@ play = True
 
 
 while play:
+        player_hand = [['diamonds', 8], ['hearts', 8]]
         # These are the main functions of the game 
         player_bet = make_bet()
         stick_twist(player_hand)
+        print player_hand
+        print player_hand2
         dealer_decision(dealer_hand)
         find_winner(player_hand, dealer_hand)
         play = play_again()
@@ -241,6 +275,7 @@ while play:
         deck = shuffle_deck(deck)
         
         player_hand = []
+        player_hand2 = []
         dealer_hand = []
         
         player_hand.append(deal_card(deck))
