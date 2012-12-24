@@ -9,6 +9,7 @@ ranks = ["A",2,3,4,5,6,7,8,9,10,"J","Q","K"]
 player_hand = []
 player_hand2 = []
 dealer_hand = []
+splitted = False
 HOUSELIMIT = 40
 player_chips = 200
 
@@ -128,6 +129,7 @@ def make_bet(): # This function will ask the user how much to bet this hand
 
 def stick_twist(hand): # This function will show the user the cards and ask them to stick, twist double down or split
         print_hand(hand)
+        global splitted
         if score_hand(hand) == 21:
                 if len(hand) == 2:
                         print "You have blackjack. That pays out 1.5x."
@@ -137,7 +139,7 @@ def stick_twist(hand): # This function will show the user the cards and ask them
         elif score_hand(hand) > 21:
                 return
         elif len(hand) == 2:
-                if hand[0][1] == hand[1][1]:
+                if hand[0][1] == hand[1][1] and splitted == False:
                         decision = raw_input("Stick(S), Twist(T), Split(SP) or Double Down(DD)?")
                         if decision.upper() == "DOUBLE" or decision.upper() == "DOUBLE DOWN" or decision.upper() == "DD" or decision.upper() == "D":
                                 global player_bet
@@ -154,19 +156,21 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                                 print "You stick."
                                 return
                         elif decision.upper() == "SPLIT" or decision.upper() == "SP":
+                                splitted = True
                                 global player_hand2
                                 global player_hand
                                 player_hand2.append(hand[1])
                                 player_hand2.append(deal_card(deck))
                                 player_hand.remove(hand[1])
                                 player_hand.append(deal_card(deck))
+                                split_hand(player_hand, player_hand2)
                                 
                         else:
                                 print "I'm sorry I didn't understand"
                                 print ""
                                 time.sleep(0.5)
                                 stick_twist(hand)
-                else:
+                elif splitted == False:
                         decision = raw_input("Stick(S), Twist(T) or Double Down(DD)?")
                         if decision.upper() == "DOUBLE" or decision.upper() == "DOUBLE DOWN" or decision.upper() == "DD" or decision.upper() == "D":
                                 global player_bet
@@ -177,6 +181,20 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                                 return
                                 
                         elif decision.upper() == "TWIST" or decision.upper() == "T":
+                                hand.append(deal_card(deck))
+                                print "You Twist."
+                                stick_twist(hand)
+                        elif decision.upper() == "STICK" or decision.upper() == "S":
+                                print "You stick."
+                                return
+                        else:
+                                print "I'm sorry I didn't understand"
+                                print ""
+                                time.sleep(0.5)
+                                stick_twist(hand)
+                else:
+                        decision = raw_input("Stick(S) or Twist(T)?")
+                        if decision.upper() == "TWIST" or decision.upper() == "T":
                                 hand.append(deal_card(deck))
                                 print "You Twist."
                                 stick_twist(hand)
@@ -202,6 +220,22 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                         print ""
                         time.sleep(0.5)
                         stick_twist(hand)
+
+def split_hand(hand1, hand2):
+        print "This is your first hand"
+        stick_twist(hand1)
+        time.sleep(1)
+        print ""
+        print "This is your second hand"
+        stick_twist(hand2)
+        print ""
+        time.sleep(1)
+        dealer_decision(dealer_hand)
+        print "How does your first hand fair?"
+        find_winner(hand1, dealer_hand)
+        print ""
+        print "How does your second hand fair?"
+        find_winner(hand2, dealer_hand)
 
 def dealer_decision(hand): # This function will act as a basic dealer
         if score_hand(hand) >= 17:
@@ -255,7 +289,7 @@ player_hand.append(deal_card(deck))
 
 dealer_hand.append(deal_card(deck))
 dealer_hand.append(deal_card(deck))
-game_intro()
+#game_intro()
 play = True
 
 
@@ -264,10 +298,9 @@ while play:
         # These are the main functions of the game 
         player_bet = make_bet()
         stick_twist(player_hand)
-        print player_hand
-        print player_hand2
-        dealer_decision(dealer_hand)
-        find_winner(player_hand, dealer_hand)
+        if splitted == False:
+                dealer_decision(dealer_hand)
+                find_winner(player_hand, dealer_hand)
         play = play_again()
         
         # The next section resets the deck and creates new hands for the user and deaker
@@ -277,6 +310,7 @@ while play:
         player_hand = []
         player_hand2 = []
         dealer_hand = []
+        splitted = False
         
         player_hand.append(deal_card(deck))
         player_hand.append(deal_card(deck))
