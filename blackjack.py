@@ -10,7 +10,7 @@ player_hand = []
 player_hand2 = []
 dealer_hand = []
 splitted = False
-HOUSELIMIT = 40
+HOUSELIMIT = 80
 player_chips = 400
 
 
