@@ -11,7 +11,7 @@ player_hand2 = []
 dealer_hand = []
 splitted = False
 HOUSELIMIT = 40
-player_chips = 200
+player_chips = 400
 
 
 def new_deck(): # This function creates a deck of 52 cards
@@ -128,6 +128,7 @@ def make_bet(): # This function will ask the user how much to bet this hand
                 sys.exit()
 
 def stick_twist(hand): # This function will show the user the cards and ask them to stick, twist double down or split
+        global player_bet
         print_hand(hand)
         global splitted
         if score_hand(hand) == 21:
@@ -173,7 +174,6 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                 elif splitted == False:
                         decision = raw_input("Stick(S), Twist(T) or Double Down(DD)?")
                         if decision.upper() == "DOUBLE" or decision.upper() == "DOUBLE DOWN" or decision.upper() == "DD" or decision.upper() == "D":
-                                global player_bet
                                 print "You double down"
                                 hand.append(deal_card(deck))
                                 player_bet *= 2
@@ -289,12 +289,11 @@ player_hand.append(deal_card(deck))
 
 dealer_hand.append(deal_card(deck))
 dealer_hand.append(deal_card(deck))
-#game_intro()
+game_intro()
 play = True
 
 
 while play:
-        player_hand = [['diamonds', 8], ['hearts', 8]]
         # These are the main functions of the game 
         player_bet = make_bet()
         stick_twist(player_hand)
