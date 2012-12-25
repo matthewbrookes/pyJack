@@ -128,6 +128,7 @@ def make_bet(): # This function will ask the user how much to bet this hand
                 sys.exit()
 
 def stick_twist(hand): # This function will show the user the cards and ask them to stick, twist double down or split
+        global player_chips 
         global player_bet
         print_hand(hand)
         global splitted
@@ -139,7 +140,7 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                 return
         elif score_hand(hand) > 21:
                 return
-        elif len(hand) == 2:
+        elif len(hand) == 2 and player_bet * 2 <= player_chips:
                 if hand[0][1] == hand[1][1] and splitted == False:
                         decision = raw_input("Stick(S), Twist(T), Split(SP) or Double Down(DD)?")
                         if decision.upper() == "DOUBLE" or decision.upper() == "DOUBLE DOWN" or decision.upper() == "DD" or decision.upper() == "D":
