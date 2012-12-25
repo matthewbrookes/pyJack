@@ -144,7 +144,6 @@ def stick_twist(hand): # This function will show the user the cards and ask them
                 if hand[0][1] == hand[1][1] and splitted == False:
                         decision = raw_input("Stick(S), Twist(T), Split(SP) or Double Down(DD)?")
                         if decision.upper() == "DOUBLE" or decision.upper() == "DOUBLE DOWN" or decision.upper() == "DD" or decision.upper() == "D":
-                                global player_bet
                                 print "You double down"
                                 hand.append(deal_card(deck))
                                 player_bet *= 2
