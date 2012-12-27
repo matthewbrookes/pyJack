@@ -104,13 +104,13 @@ def check_insurance(hand): # This function will check if the player needs to add
                 else:
                         print_dealer_hand(hand)
                         if score_hand(hand) == 21:
-                                print "The dealer shows blackjack. You will be paid %s chips" % (insurance * 2)
+                                print "The dealer shows blackjack. You will be paid %s chips" % (int(insurance * 2))
                                 player_chips += (insurance * 2)
                                 time.sleep(0.5)
                                 print ""
                                 return
                         else:
-                                print "The dealer did not show blackjack. You will lose %s chips" % (insurance)
+                                print "The dealer did not show blackjack. You will lose %s chips" % (int(insurance))
                                 player_chips -= insurance
                                 time.sleep(0.5)
                                 print ""
@@ -306,10 +306,13 @@ def split_hand(hand1, hand2):
         find_winner(hand2, dealer_hand)
 
 def dealer_decision(hand): # This function will act as a basic dealer
+        print_dealer_hand(hand)
         if score_hand(hand) >= 17:
                 return
         else:
                 dealer_hand.append(deal_card(deck))
+                time.sleep(0.5)
+                print ""
                 dealer_decision(dealer_hand)
 
 def find_winner(pHand, dHand): # This function checks to see what the outcome of the game is
@@ -366,6 +369,7 @@ while play:
         player_bet = make_bet()
         check_insurance(dealer_hand)
         stick_twist(player_hand)
+        time.sleep(0.5)
         if splitted == False:
                 dealer_decision(dealer_hand)
                 find_winner(player_hand, dealer_hand)
