@@ -3,6 +3,7 @@
 import random
 import sys
 import time
+import math
 
 suits = ["spades", "clubs", "hearts", "diamonds"]
 ranks = ["A",2,3,4,5,6,7,8,9,10,"J","Q","K"]
@@ -12,7 +13,6 @@ dealer_hand = []
 splitted = False
 HOUSELIMIT = 80
 player_chips = 400
-
 
 def new_deck(): # This function creates a deck of 52 cards
         deck = []
@@ -62,7 +62,7 @@ def print_hand(hand): # This function is ran to print the hand to the user as we
         print ""
         print "Your hand has a score of: %s" % (score_hand(hand))
 
-def print_dealer_hand(hand): # This function will print the dealer hand
+def print_dealer_hand(hand): # This function will print the dealer's hand
         print "The dealer's hand contains:"
         print ""
         for i in range(len(hand)):
@@ -80,7 +80,56 @@ def print_dealer_hand(hand): # This function will print the dealer hand
         print ""
         print "The hand has a score of: %s" % (score_hand(hand))
         
-        
+def check_insurance(hand): # This function will check if the player needs to add an insurance bet and will print the dealer's face up card if not
+        global player_bet
+        global player_chips
+        contains_ace = False
+        if hand[0][1] == 'A':
+                contains_ace = True
+        if contains_ace == True:
+                print ""
+                print "The dealer shows an Ace"
+                print "You can choose to place a bet upto %s chips" % (math.floor(player_bet/2))
+                insurance = raw_input("How much will you bet?")
+                try:
+                        insurance = int(insurance)
+                except ValueError:
+                        print "Please enter a whole number"
+                        time.sleep(0.5)
+                        check_insurance(hand)
+                if insurance > math.floor(player_bet/2) or insurance < 0:
+                        print "Please enter a valid bet"
+                        time.sleep(0.5)
+                        check_insurance(hand)
+                else:
+                        print_dealer_hand(hand)
+                        if score_hand(hand) == 21:
+                                print "The dealer shows blackjack. You will be paid %s chips" % (insurance * 2)
+                                player_chips += (insurance * 2)
+                                time.sleep(0.5)
+                                print ""
+                                return
+                        else:
+                                print "The dealer did not show blackjack. You will lose %s chips" % (insurance)
+                                player_chips -= insurance
+                                time.sleep(0.5)
+                                print ""
+                                return
+        else:
+                print ""
+                rank = hand[0][1]
+                if rank == 'K':
+                        rank = "King"
+                elif rank == 'Q':
+                        rank = "Queen"
+                elif rank == 'J':
+                        rank = "Jack"
+                elif rank == 'A':
+                        rank = "Ace"
+                print "The dealer's face up card is the %s of %s" % (rank, hand[0][0])
+                print ""
+                return                
+                
 def score_hand(hand): # This function returns the score of the inputted hand
         score = 0
         number_aces = 0
@@ -313,8 +362,9 @@ play = True
 
 
 while play:
-        # These are the main functions of the game 
+        # These are the main functions of the game
         player_bet = make_bet()
+        check_insurance(dealer_hand)
         stick_twist(player_hand)
         if splitted == False:
                 dealer_decision(dealer_hand)
