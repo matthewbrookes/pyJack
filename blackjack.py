@@ -61,6 +61,25 @@ def print_hand(hand): # This function is ran to print the hand to the user as we
                 print "%s of %s" % (rank, suit) 
         print ""
         print "Your hand has a score of: %s" % (score_hand(hand))
+
+def print_dealer_hand(hand): # This function will print the dealer hand
+        print "The dealer's hand contains:"
+        print ""
+        for i in range(len(hand)):
+                suit = hand[i][0]
+                rank = hand[i][1]
+                if rank == 'K':
+                        rank = "King"
+                elif rank == 'Q':
+                        rank = "Queen"
+                elif rank == 'J':
+                        rank = "Jack"
+                elif rank == 'A':
+                        rank = "Ace"
+                print "%s of %s" % (rank, suit) 
+        print ""
+        print "The hand has a score of: %s" % (score_hand(hand))
+        
         
 def score_hand(hand): # This function returns the score of the inputted hand
         score = 0
