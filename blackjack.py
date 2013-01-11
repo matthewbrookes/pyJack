@@ -89,7 +89,7 @@ def check_insurance(hand): # This function will check if the player needs to add
         if contains_ace == True:
                 print ""
                 print "The dealer shows an Ace"
-                print "You can choose to place a bet upto %s chips" % (math.floor(player_bet/2))
+                print "You can choose to place a bet upto %s chips" % (int(math.floor(player_bet/2)))
                 insurance = raw_input("How much will you bet?")
                 try:
                         insurance = int(insurance)
