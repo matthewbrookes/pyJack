@@ -4,7 +4,9 @@ import random
 import sys
 import time
 import math
-
+import pygame
+from pygame.locals import *
+pygame.init()
 suits = ["spades", "clubs", "hearts", "diamonds"]
 ranks = ["A",2,3,4,5,6,7,8,9,10,"J","Q","K"]
 player_hand = []
@@ -13,6 +15,13 @@ dealer_hand = []
 splitted = False
 HOUSELIMIT = 80
 player_chips = 400
+WINDOWWIDTH = 600
+WINDOWHEIGHT = 600
+TEXTCOLOR = (255, 255, 255)
+BACKGROUNDCOLOR = (0, 0, 0)
+
+font = pygame.font.SysFont(None, 48)
+
 
 def new_deck(): # This function creates a deck of 52 cards
         deck = []
@@ -351,6 +360,19 @@ def play_again(): # This functions asks the user whether to play another hand
                 print "I'm sorry I didn't understand"
                 print ""
                 play_again()  
+def drawText(text, font, surface, x, y):
+    textobj = font.render(text, 1, TEXTCOLOR)
+    textrect = textobj.get_rect()
+    textrect.topleft = (x, y)
+    surface.blit(textobj, textrect)
+
+mainClock = pygame.time.Clock()
+windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+pygame.display.set_caption('pyJack')
+pygame.mouse.set_visible(True)
+drawText('Score: %s' % (player_chips), font, windowSurface, 10, 0)
+windowSurface.fill(BACKGROUNDCOLOR)
+pygame.display.update()
 
 deck = new_deck()
 deck = shuffle_deck(deck)
@@ -360,9 +382,10 @@ player_hand.append(deal_card(deck))
 
 dealer_hand.append(deal_card(deck))
 dealer_hand.append(deal_card(deck))
+
+
 game_intro()
 play = True
-
 
 while play:
         # These are the main functions of the game
@@ -389,5 +412,4 @@ while play:
         
         dealer_hand.append(deal_card(deck))
         dealer_hand.append(deal_card(deck))
-        
 
