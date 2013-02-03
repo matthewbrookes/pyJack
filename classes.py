@@ -41,10 +41,15 @@ class Deck(object):
         return c
                 
 class Hand(object):
-    def __init__(self, deck):
+    def __init__(self):
         self.hand = []
+    
+    def twist(self, deck):
         self.hand.append(deck.return_card())
-        self.hand.append(deck.return_card())
+    
+    def add_card(self, card):
+        self.hand.append(card)
+    
     def print_hand(self):
         for i in range(len(self.hand)):
                 suit = self.hand[i].return_suit()
