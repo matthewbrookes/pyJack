@@ -60,10 +60,15 @@ while(True):
         player_hand.twist(deck)
         dealer_hand.twist(deck)
 
-    #draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface) #Show the player his hand
-    #draw_hand(dealer_hand.return_first_card_hand(), DEALER_HAND_COORDINATES,  window_surface) #Show the dealers face up card
-    deal_cards(player_hand, dealer_hand, PLAYER_HAND_COORDINATES, DEALER_HAND_COORDINATES, window_surface)
+    '''deal_cards(player_hand, dealer_hand, PLAYER_HAND_COORDINATES, DEALER_HAND_COORDINATES, window_surface, 0.4)
     time.sleep(1) #So we can see what has happened
+    background = os.path.join("assets","background_options.png")
+    background_surface = pygame.image.load(background)
+    window_surface.blit(background_surface, (0,0))
+    deal_cards(player_hand, dealer_hand, PLAYER_HAND_COORDINATES, DEALER_HAND_COORDINATES, window_surface, 0)'''
+    game_loop(player_hand, PLAYER_HAND_COORDINATES, dealer_hand, DEALER_HAND_COORDINATES, window_surface, deck)
+    #get_choice(player_hand, deck)
+    #time.sleep(3)
     break
 sys.exit()
 

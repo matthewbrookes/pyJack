@@ -52,6 +52,36 @@ class Hand(object): #The player's hand will be a direct object of this class
     
     def return_hand(self):
         return self.hand
+        
+    def return_score(self):
+        score = 0
+        number_aces = 0
+        for i in range(len(self.hand)):
+                rank = self.hand[i].return_rank()
+                if rank == 'K':
+                        score += 10
+                elif rank == 'Q':
+                        score += 10
+                elif rank == 'J':
+                        score += 10
+                elif rank == 'A':
+                        number_aces += 1
+                        score += 11
+                else:
+                        score += rank
+        for i in range(number_aces): # This loop will only be executed for each ace in the hand
+                if score > 21: # If the score is greater than 21 then we want to remove 10
+                        score -= 10
+                        number_aces -= 1
+                else:
+                        number_aces -= 1
+        return score  
+
+    def can_twist(self):
+        if self.return_score() < 22:
+            return True
+        else:
+            return False
                 
 class DealerHand(Hand): #The dealer's hand inherits fom hand as it has special methods
     def return_first_card(self): #Returns the first card as a card object
