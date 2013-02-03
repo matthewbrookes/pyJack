@@ -24,21 +24,47 @@ def draw_text(text, font, surface, x, y, color): #Draws text with these paramete
     surface.blit(textobj, textrect)
 
 def draw_hand(hand, coords, surface): #Draw the hand on the screen, requires the coordinates in an array
-    if len(hand.return_hand()) > 1:
-        for i in range(len(hand.return_hand())):
-            imagefile = hand.return_hand()[i].return_file() + ".png"
-            card_image = pygame.image.load(os.path.join('assets', imagefile))
-            card_rect = card_image.get_rect()
-            card_rect.topleft = coords[i]
-            surface.blit(card_image, card_rect)
-    else:
-            imagefile = hand.return_hand()[0].return_file() + ".png"
-            card_image = pygame.image.load(os.path.join('assets', imagefile))
-            card_rect = card_image.get_rect()
-            card_rect.topleft = coords[0]
-            back_image = pygame.image.load(os.path.join('assets', 'back.png'))
-            back_rect = back_image.get_rect()
-            back_rect.topleft = coords[1]
-            surface.blit(card_image, card_rect)  
-            surface.blit(back_image, back_rect)                    
+    for i in range(len(hand.return_hand())):
+        imagefile = hand.return_hand()[i].return_file() + ".png"
+        card_image = pygame.image.load(os.path.join('assets', imagefile))
+        card_rect = card_image.get_rect()
+        card_rect.topleft = coords[i]
+        surface.blit(card_image, card_rect)
+        pygame.display.update()
+        time.sleep(0.4)
+
+
+def deal_cards(p_hand, d_hand, p_coords, d_coords, surface):
+    time.sleep(0.4)
+    #Show the back of the 1st card for player
+    back_image = pygame.image.load(os.path.join('assets', 'back.png'))
+    player_back_rect1 = back_image.get_rect()
+    player_back_rect1.topleft = p_coords[0]
+    surface.blit(back_image, player_back_rect1)
     pygame.display.update()
+    time.sleep(0.4)
+    
+    #Show the front of dealer's 1st card
+    dealer_image = pygame.image.load(os.path.join('assets', d_hand.return_first_card_hand().return_hand()[0].return_file() + ".png"))
+    dealer_rect = dealer_image.get_rect()
+    dealer_rect.topleft = d_coords[0]
+    surface.blit(dealer_image, dealer_rect)
+    pygame.display.update()
+    time.sleep(0.4)
+    
+    #Show the back of player's 2nd card
+    player_back_rect2 = back_image.get_rect()
+    player_back_rect2.topleft = p_coords[1]
+    surface.blit(back_image, player_back_rect2)
+    pygame.display.update()
+    time.sleep(0.4)
+    
+    #Show the back of dealer's 2nd card
+    dealer_rect2 = back_image.get_rect()
+    dealer_rect2.topleft = d_coords[1]
+    surface.blit(back_image, dealer_rect2)
+    pygame.display.update()
+    time.sleep(0.4)
+    
+    #Show the player's cards
+    draw_hand(p_hand, p_coords, surface)

@@ -60,9 +60,10 @@ while(True):
         player_hand.twist(deck)
         dealer_hand.twist(deck)
 
-    draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface) #Show the player his hand
-    draw_hand(dealer_hand.return_first_card_hand(), DEALER_HAND_COORDINATES,  window_surface) #Show the dealers face up card
+    #draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface) #Show the player his hand
+    #draw_hand(dealer_hand.return_first_card_hand(), DEALER_HAND_COORDINATES,  window_surface) #Show the dealers face up card
+    deal_cards(player_hand, dealer_hand, PLAYER_HAND_COORDINATES, DEALER_HAND_COORDINATES, window_surface)
     time.sleep(1) #So we can see what has happened
     break
-
+sys.exit()
 
