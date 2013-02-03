@@ -65,3 +65,6 @@ class Hand(object):
                         rank = "Ace"
                 print "%s of %s" % (rank, suit) 
                 
+class DealerHand(Hand):
+    def return_first_card(self):
+        return self.hand[0]        
