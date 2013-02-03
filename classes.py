@@ -4,7 +4,7 @@ class Card(object): #Each card will be an object of this class
     def __init__(self, suit, rank):
         self.suit = suit
         self.rank = rank
-        self.image = str(self.suit[0] + str(self.rank))
+        self.image = str(self.suit[0] + str(self.rank).lower())
     
     def __repr__(self): #What to display when printing raw object
         return str(self.suit + str(self.rank))
