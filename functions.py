@@ -11,10 +11,10 @@ def wait_for_player_to_press_key(): #Game pauses whilst waiting for user to pres
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
-                terminate()
+                sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE: # pressing escape quits
-                    terminate()
+                    sys.exit()
                 return
                 
 def draw_text(text, font, surface, x, y, color): #Draws text with these parameters
@@ -101,11 +101,57 @@ def get_choice(hand, deck): #Allows the user to choose what to do
                 break
                 
         elif event.type == QUIT:
-                terminate()
+                sys.exit()
         elif event.type == KEYDOWN:
             if event.key == K_ESCAPE: # pressing escape quits
-                terminate()
+                sys.exit()
 
+def get_bet(limit, chips, font, surface, bet): #Gets the amount user wants to bet
+    background = os.path.join("assets","background_make_bet.png") 
+    background_surface = pygame.image.load(background)
+    surface.blit(background_surface, (0,0))
+    draw_text(str(chips), font, surface, 160, 157, (255,255,255)) # Display number of chips
+    draw_text(str(limit), font, surface, 473, 157, (255,255,255)) # Displays limit
+    draw_text(str(bet), font, surface, 160, 207, (255,255,255)) # Displays bet
+    pygame.display.update()
+    while True:
+        event = pygame.event.poll()
+        if event.type == MOUSEBUTTONDOWN and event.button == 1:
+            coords = list(event.pos)
+            if coords[0] > 144 and coords[1] > 251 and coords[0] < 233 and coords[1] < 317:# +1 box
+                if bet +1 <= limit and bet +1<= chips:
+                    return get_bet(limit, chips, font, surface, bet+1)
+                    break
+            elif coords[0] > 144 and coords[1] > 348 and coords[0] < 233 and coords[1] < 414:# -1 box
+                if bet-1 > 0:
+                    return get_bet(limit, chips, font, surface, bet-1)
+                    break
+            elif coords[0] > 291 and coords[1] > 251 and coords[0] < 380 and coords[1] < 317:# +5 box
+                if bet +5<= limit and bet +5<= chips:
+                    return get_bet(limit, chips, font, surface, bet+5)
+                    break
+            elif coords[0] > 291 and coords[1] > 348 and coords[0] < 380 and coords[1] < 414:# -5 box
+                if bet -5 > 0:
+                    return get_bet(limit, chips, font, surface, bet-5)
+                    break
+            elif coords[0] > 438 and coords[1] > 251 and coords[0] < 527 and coords[1] < 317:# +10 box
+                if bet +10<= limit and bet +10<= chips:
+                    return get_bet(limit, chips, font, surface, bet+10)
+                    break
+            elif coords[0] > 291 and coords[1] > 348 and coords[0] < 527 and coords[1] < 414:# -10 box
+                if bet -10 > 0:
+                    return get_bet(limit, chips, font, surface, bet-10)
+                    break
+            elif coords[0] > 291 and coords[1] > 441 and coords[0] < 380 and coords[1] < 507:# Return box
+                return bet
+                break
+        elif event.type == QUIT:
+                sys.exit()
+        elif event.type == KEYDOWN:
+            if event.key == K_ESCAPE: # pressing escape quits
+                sys.exit()
+    #time.sleep(2)
+                
 def twist(hand, deck): #Function when twist box is pressed
     hand.twist(deck)
     

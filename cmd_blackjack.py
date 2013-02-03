@@ -352,12 +352,7 @@ def play_again(): # This functions asks the user whether to play another hand
                 print "I'm sorry I didn't understand"
                 print ""
                 play_again()  
-def drawText(text, font, surface, x, y):
-    textobj = font.render(text, 1, TEXTCOLOR)
-    textrect = textobj.get_rect()
-    textrect.topleft = (x, y)
-    surface.blit(textobj, textrect)
-
+    
 
 deck = new_deck()
 deck = shuffle_deck(deck)

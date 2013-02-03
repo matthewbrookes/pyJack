@@ -59,16 +59,11 @@ while(True):
     for i in range(2):
         player_hand.twist(deck)
         dealer_hand.twist(deck)
-
-    '''deal_cards(player_hand, dealer_hand, PLAYER_HAND_COORDINATES, DEALER_HAND_COORDINATES, window_surface, 0.4)
-    time.sleep(1) #So we can see what has happened
-    background = os.path.join("assets","background_options.png")
-    background_surface = pygame.image.load(background)
+    #Get the bet
+    bet = get_bet(HOUSELIMIT, player_chips, font, window_surface, 1)
     window_surface.blit(background_surface, (0,0))
-    deal_cards(player_hand, dealer_hand, PLAYER_HAND_COORDINATES, DEALER_HAND_COORDINATES, window_surface, 0)'''
+    time.sleep(0.4)
     game_loop(player_hand, PLAYER_HAND_COORDINATES, dealer_hand, DEALER_HAND_COORDINATES, window_surface, deck)
-    #get_choice(player_hand, deck)
-    #time.sleep(3)
     break
 sys.exit()
 
