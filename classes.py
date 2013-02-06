@@ -50,23 +50,26 @@ class Hand(object): #The player's hand will be a direct object of this class
     def add_card(self, card): #Add card manually
         self.hand.append(card)
     
-    def return_hand(self):
+    def return_hand(self): #Returns array of cards in hand
         return self.hand
         
-    def return_score(self):
+    def return_score(self): #Returns the score of the hand
         score = 0
         number_aces = 0
-        for i in range(len(self.hand)):
+        for i in range(len(self.hand)): #Iterates over every card in hand
                 rank = self.hand[i].return_rank()
+                #If it's a picture card
                 if rank == 'K':
                         score += 10
                 elif rank == 'Q':
                         score += 10
                 elif rank == 'J':
                         score += 10
+                #If it's an Ace
                 elif rank == 'A':
                         number_aces += 1
                         score += 11
+                #If it's a regular card
                 else:
                         score += rank
         for i in range(number_aces): # This loop will only be executed for each ace in the hand
@@ -78,7 +81,7 @@ class Hand(object): #The player's hand will be a direct object of this class
         return score  
 
     def can_twist(self):
-        if self.return_score() < 22:
+        if self.return_score() < 21:
             return True
         else:
             return False
