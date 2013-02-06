@@ -45,11 +45,6 @@ wait_for_player_to_press_key() #Don't begin untill user has pressed a key
 
 #Main body of game
 while True: #Main loop of game
-    #Draw custom background
-    background = os.path.join("assets","background.png")
-    background_surface = pygame.image.load(background)
-    window_surface.blit(background_surface, (0,0))
-    window_surface.blit(background_surface, (0,0))
     deck = classes.Deck() # Create the deck
     #Create the initial hands
     player_hand = classes.Hand()
@@ -60,6 +55,11 @@ while True: #Main loop of game
         dealer_hand.twist(deck)
     #Get the bet
     bet = get_bet(HOUSELIMIT, player_chips, font, window_surface, 1)
+    #Draw custom background
+    background = os.path.join("assets","background.png")
+    background_surface = pygame.image.load(background)
+    window_surface.blit(background_surface, (0,0))
+    pygame.display.update()
     time.sleep(0.4)
     deal_cards(player_hand, dealer_hand, PLAYER_HAND_COORDINATES, DEALER_HAND_COORDINATES, window_surface, 0.4) #Deal cards
     while True: #Main interface for game
