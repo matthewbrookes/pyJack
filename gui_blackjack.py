@@ -97,9 +97,14 @@ while True: #Main loop of game
             if choice == "Twist":
                 draw_dealer_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0)
                 (player_hand, PLAYER_HAND_COORDINATES, window_surface, 0)
-                pygame.display.update()
-                
-            if choice == "Stick":
+                pygame.display.update()    
+            elif choice == "Stick":
+                break
+            elif choice == "DoubleDown":
+                player_hand.twist(deck)
+                draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface, 0)
+                bet *= 2
+                time.sleep(2)
                 break
         
         if player_hand.return_score() < 22: #Dealer should only get more cards if player isn't bust
