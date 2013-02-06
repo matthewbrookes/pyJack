@@ -88,17 +88,16 @@ def get_choice(hand, deck): #Allows the user to choose what to do
         if event.type == MOUSEBUTTONDOWN and event.button == 1:
             coords = list(event.pos)
             if coords[0] > 11 and coords[1] > 283 and coords[0] < 120 and coords[1] < 355: #In the Stick box
-                print "Stick"
-                break
+                return "Stick"
             if coords[0] > 142 and coords[1] > 283 and coords[0] < 251 and coords[1] < 355 and hand.can_twist(): #In the Twist box
                 twist(hand, deck)
-                break
+                return "Twist"
             if coords[0] > 354 and coords[1] > 283 and coords[0] < 463 and coords[1] < 355: #In the double down box
                 print "Double Down"
-                break
+                return "DoubleDown"
             if coords[0] > 483 and coords[1] > 283 and coords[1] < 592 and coords[1] < 355: #In the Split box
                 print "Split"
-                break
+                return "Split"
                 
         elif event.type == QUIT:
                 sys.exit()
@@ -155,34 +154,25 @@ def get_bet(limit, chips, font, surface, bet): #Gets the amount user wants to be
 def twist(hand, deck): #Function when twist box is pressed
     hand.twist(deck)
     
-def game_loop(p_hand, p_coords, d_hand, d_coords, surface, deck): #The main loop of the game
-    deal_cards(p_hand, d_hand, p_coords, d_coords, surface, 0.4) #Deal cards
+def find_winner(pHand, dHand): # This function checks to see what the outcome of the game is
+    if pHand.return_score() == 21 and len(pHand.return_hand()) == 2: #If player scores 21 and has two cards
+            return "Blackjack"
+    elif pHand.return_score() > 21: #If player is bust
+            return "PlayerBust"
+    elif dHand.return_score() > 21: #If dealer is bust
+            return "DealerBust"
+    elif dHand.return_score() == pHand.return_score(): #If scores are equal
+            return "Push"
+    else:
+            if pHand.return_score() > dHand.return_score(): #If player scores higher
+                    return "PlayerWin"
+            else: #If dealer scores higher
+                    return "DealerWin"
+                    
+def dealer_decision(hand, coords, surface, deck): # This function will add cards to dealer's hand untill he scores 17 or more
     while True:
-
-        #Show the availabe options
-        background = os.path.join("assets","background_options.png") 
-        background_surface = pygame.image.load(background)
-        surface.blit(background_surface, (0,0))
-        
-        #Display hands
-        draw_dealer_hand(d_hand, d_coords, surface, 0)
-        draw_hand(p_hand, p_coords, surface, 0)
-        
-        pygame.display.update() #Refresh display
-        
-        get_choice(p_hand, deck) #Let user make a choice
-        
-        #Set default background
-        background = os.path.join("assets","background.png")
-        background_surface = pygame.image.load(background)
-        surface.blit(background_surface, (0,0))
-        
-        pygame.display.update()
-        
-        #Display hands
-        draw_dealer_hand(d_hand, d_coords, surface, 0)
-        draw_hand(p_hand, p_coords, surface, 0)
-        
-        pygame.display.update() #Refresh display
-        time.sleep(1) #Pause
-    
+        draw_hand(hand, coords, surface, 0.4) #Draw the complete dealer's hand
+        if hand.return_score() > 16: #If the score is 17 or more
+                return hand
+        else:
+                hand.twist(deck)
