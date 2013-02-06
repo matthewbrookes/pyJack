@@ -154,7 +154,7 @@ def get_bet(limit, chips, font, surface, bet): #Gets the amount user wants to be
 def twist(hand, deck): #Function when twist box is pressed
     hand.twist(deck)
     
-def find_winner(pHand, dHand): # This function checks to see what the outcome of the game is
+def find_winner(pHand, dHand): #This function checks to see what the outcome of the game is
     if pHand.return_score() == 21 and len(pHand.return_hand()) == 2: #If player scores 21 and has two cards
             return "Blackjack"
     elif pHand.return_score() > 21: #If player is bust
@@ -169,10 +169,16 @@ def find_winner(pHand, dHand): # This function checks to see what the outcome of
             else: #If dealer scores higher
                     return "DealerWin"
                     
-def dealer_decision(hand, coords, surface, deck): # This function will add cards to dealer's hand untill he scores 17 or more
+def dealer_decision(hand, coords, surface, deck): #This function will add cards to dealer's hand untill he scores 17 or more
     while True:
         draw_hand(hand, coords, surface, 0.4) #Draw the complete dealer's hand
         if hand.return_score() > 16: #If the score is 17 or more
                 return hand
         else:
                 hand.twist(deck)
+
+def display_winner(text, font, surface, color, bgcolor): #This functions shows the player how many chips he has lost
+    surface.fill(bgcolor) #Set default background
+    draw_text(text, font, surface, 300, 200, color) #Draw the message
+    pygame.display.update()
+    time.sleep(3) #Give the player the chance to see how much they have won/lost

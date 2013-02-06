@@ -107,14 +107,25 @@ while True: #Main loop of game
         
         #Get the outcome of the round and change player's chips
         outcome = find_winner(player_hand, dealer_hand)
+        s = "" #Will hold an "s" if the bet is more than one
+        if bet != 1:
+            s = "s"
         if outcome == "Blackjack":
             player_chips += int(round(bet * 1.5))
+            text = "You have won %s chip%s" % (int(round(bet * 1.5)), s)
+            display_winner(text, font, window_surface, TEXTCOLOR, BGCOLOR) #Displays the result to the player
         elif outcome == "PlayerWin" or outcome == "DealerBust":
             player_chips += bet
+            text = "You have won %s chip%s" % (bet, s)
+            display_winner(text, font, window_surface, TEXTCOLOR, BGCOLOR)
         elif outcome == "DealerWin" or outcome == "PlayerBust":
+            text = "You have lost %s chip%s" % (bet, s)
+            display_winner(text, font, window_surface, TEXTCOLOR, BGCOLOR)
             player_chips -= bet
         else:
             print "Push"
+            text = "You have pushed"
+            display_winner(text, font, window_surface, TEXTCOLOR, BGCOLOR)               
         break
     
 sys.exit()
