@@ -85,7 +85,10 @@ class Hand(object): #The player's hand will be a direct object of this class
             return True
         else:
             return False
-                
+    
+    def delete_card(self, index):
+        del self.hand[index]
+    
 class DealerHand(Hand): #The dealer's hand inherits fom hand as it has special methods
     def return_first_card(self): #Returns the first card as a card object
         return self.hand[0] 

@@ -7,7 +7,7 @@ def draw_start_screen(font, surface, w, h, color): #Draws the screen at the very
     draw_text('pyJack', font, surface, (w / 2 ), (h / 5), color)
     draw_text('Press a key to start.', font, surface, w / 2, (h / 3) + 50, color )
 
-def wait_for_player_to_press_key(): #Game pauses whilst waiting for user to press a key
+def wait_for_player_to_press_key(): #Game pauses whilst waiting for player to press a key
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -82,21 +82,19 @@ def deal_cards(p_hand, d_hand, p_coords, d_coords, surface, pause): #Deals the c
     #Show the player's cards
     draw_hand(p_hand, p_coords, surface, pause)
     
-def get_choice(hand, deck): #Allows the user to choose what to do
+def get_choice(hand, deck, split): #Allows the player to choose what to do
     while True:
         event = pygame.event.poll()
         if event.type == MOUSEBUTTONDOWN and event.button == 1:
             coords = list(event.pos)
             if coords[0] > 11 and coords[1] > 283 and coords[0] < 120 and coords[1] < 355: #In the Stick box
                 return "Stick"
-            if coords[0] > 142 and coords[1] > 283 and coords[0] < 251 and coords[1] < 355 and hand.can_twist(): #In the Twist box
+            if coords[0] > 142 and coords[1] > 283 and coords[0] < 251 and coords[1] < 355 and hand.can_twist(): #In the Twist box and the player can twist
                 twist(hand, deck)
                 return "Twist"
-            if coords[0] > 354 and coords[1] > 283 and coords[0] < 463 and coords[1] < 355: #In the double down box
-                print "Double Down"
+            if coords[0] > 354 and coords[1] > 283 and coords[0] < 463 and coords[1] < 355 and hand.can_twist() and split == False and len(hand.return_hand()) == 2: #In the double down box and the player can twist and the player hasn't split and the hand has only two cards
                 return "DoubleDown"
-            if coords[0] > 483 and coords[1] > 283 and coords[1] < 592 and coords[1] < 355: #In the Split box
-                print "Split"
+            if coords[0] > 483 and coords[1] > 283 and coords[1] < 592 and coords[1] < 355 and hand.return_hand()[0].return_rank() == hand.return_hand()[1].return_rank() and split == False and len(hand.return_hand()) == 2: #In the Split box and the first two cards are equal and the player hasn't split and the hand has only two cards
                 return "Split"
                 
         elif event.type == QUIT:
@@ -105,7 +103,7 @@ def get_choice(hand, deck): #Allows the user to choose what to do
             if event.key == K_ESCAPE: # pressing escape quits
                 sys.exit()
 
-def get_bet(limit, chips, font, surface, bet): #Gets the amount user wants to bet
+def get_bet(limit, chips, font, surface, bet): #Gets the amount player wants to bet
     background = os.path.join("assets","background_make_bet.png") 
     background_surface = pygame.image.load(background)
     surface.blit(background_surface, (0,0))
@@ -173,12 +171,12 @@ def dealer_decision(hand, coords, surface, deck): #This function will add cards 
     while True:
         draw_hand(hand, coords, surface, 0.4) #Draw the complete dealer's hand
         if hand.return_score() > 16: #If the score is 17 or more
+                time.sleep(1.5)
                 return hand
         else:
                 hand.twist(deck)
 
-def display_winner(text, font, surface, color, bgcolor): #This functions shows the player how many chips he has lost
-    surface.fill(bgcolor) #Set default background
+def display_winner(text, font, surface, color): #This functions shows the player how many chips he has lost
     draw_text(text, font, surface, 300, 200, color) #Draw the message
     pygame.display.update()
     time.sleep(3) #Give the player the chance to see how much they have won/lost
