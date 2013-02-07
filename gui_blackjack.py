@@ -45,6 +45,14 @@ wait_for_player_to_press_key() #Don't begin untill user has pressed a key
 
 #Main body of game
 while True: #Main loop of game
+    if player_chips < 1: # If the player has less than 1 chips
+        window_surface.fill(BGCOLOR) # Fill the screen with the background colour
+        # Tells user what has happened and that the game will close
+        draw_text("You have run out of chips", font, window_surface, 300, 200, TEXTCOLOR)
+        draw_text("The game will now close", pygame.font.SysFont(None, 42), window_surface, 300, 350, TEXTCOLOR)
+        pygame.display.update()
+        time.sleep(2)
+        sys.exit() # Close game
     deck = classes.Deck() # Create the deck
     #Create the initial hands
     player_hand = classes.Hand()
