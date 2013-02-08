@@ -45,6 +45,7 @@ wait_for_player_to_press_key() #Don't begin untill player has pressed a key
 #Main body of game
 while True: #Main loop of game
     split = False
+    dealer_blackjack = False # Will be true if the dealer has a blackjack on his first two cards
     if player_chips < 1: # If the player has less than 1 chips
         window_surface.fill(BGCOLOR) # Fill the screen with the background colour
         # Tells player what has happened and that the game will close
@@ -62,18 +63,60 @@ while True: #Main loop of game
         player_hand.twist(deck)
         dealer_hand.twist(deck)
     
-    #Get the bet
-    bet = get_bet(HOUSELIMIT, player_chips, font, window_surface, 1)
-    #Draw custom background
+    # Get the bet
+    bet = get_bet(HOUSELIMIT, 1, player_chips, font, window_surface, 1, os.path.join("assets","background_make_bet.png"), False)
+    # Draw custom background
     background = os.path.join("assets","background.png")
     background_surface = pygame.image.load(background)
     window_surface.blit(background_surface, (0,0))
     pygame.display.update()
     time.sleep(0.4) # Mimics time taken to deal first card
     deal_cards(player_hand, dealer_hand, PLAYER_HAND_COORDINATES, DEALER_HAND_COORDINATES, window_surface, 0.4) #Deal cards
+    
+    if dealer_hand.return_first_card().return_rank() == 'A': # If the dealer shows an Ace
+        window_surface.fill(BGCOLOR) # Fill screen with BGCOLOR
+        draw_text("You need to make an insurance bet", font, window_surface, 300, 200, TEXTCOLOR)
+        pygame.display.update()
+        time.sleep(1.5) # Pause to give reader time to read message
+        
+        background = os.path.join("assets","background_insurance.png")
+        background_surface = pygame.image.load(background)
+        window_surface.blit(background_surface, (0,0))
+        
+        insurance_bet = get_bet(int(math.floor(bet/2)), 0, "", font, window_surface, 0, os.path.join("assets","background_insurance.png"), True)
+        
+        if dealer_hand.return_score() == 21:
+            dealer_blackjack = True
+            background = os.path.join("assets", "background.png")
+            background_surface = pygame.image.load(background)
+            window_surface.blit(background_surface, (0,0))
+            
+            #Display hands
+            draw_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0)
+            draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface, 0)
+            
+            pygame.display.update()
+            time.sleep(1)
+            
+            window_surface.fill(BGCOLOR) # Fill screen with BGCOLOR
+            draw_text("Dealer shows blackjack", font, window_surface, 300, 200, TEXTCOLOR)
+            draw_text("You've won %s chips" % (insurance_bet), font, window_surface, 300, 300, TEXTCOLOR)
+            pygame.display.update()
+            player_chips += insurance_bet
+            time.sleep(1.5)
+            
+        else:
+            dealer_blackjack = False
+            window_surface.fill(BGCOLOR) # Fill screen with BGCOLOR
+            draw_text("Dealer doesn't have blackjack", font, window_surface, 300, 200, TEXTCOLOR)
+            draw_text("You've lost %s chips" % (insurance_bet), font, window_surface, 300, 300, TEXTCOLOR)
+            pygame.display.update()
+            player_chips -= insurance_bet
+            time.sleep(2)
+    
     while True: #Main interface for game
         #Show the availabe options
-        background = os.path.join("assets","background_options.png") 
+        background = os.path.join("assets", "background_options.png") 
         background_surface = pygame.image.load(background)
         window_surface.blit(background_surface, (0,0))
         #Display hands
