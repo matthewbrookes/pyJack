@@ -82,26 +82,83 @@ def deal_cards(p_hand, d_hand, p_coords, d_coords, surface, pause): #Deals the c
     #Show the player's cards
     draw_hand(p_hand, p_coords, surface, pause)
     
-def get_choice(hand, deck, split): #Allows the player to choose what to do
+def get_choice(hand, deck, split, surface): # Allows the player to choose what to do
+    blank_surface = pygame.Surface((111, 74))
+    blank_surface.fill((77, 189, 51))
     while True:
-        event = pygame.event.poll()
-        if event.type == MOUSEBUTTONDOWN and event.button == 1:
-            coords = list(event.pos)
-            if coords[0] > 11 and coords[1] > 283 and coords[0] < 120 and coords[1] < 355: #In the Stick box
-                return "Stick"
-            if coords[0] > 142 and coords[1] > 283 and coords[0] < 251 and coords[1] < 355 and hand.can_twist(): #In the Twist box and the player can twist
-                twist(hand, deck)
-                return "Twist"
-            if coords[0] > 354 and coords[1] > 283 and coords[0] < 463 and coords[1] < 355 and hand.can_twist() and split == False and len(hand.return_hand()) == 2: #In the double down box and the player can twist and the player hasn't split and the hand has only two cards
-                return "DoubleDown"
-            if coords[0] > 483 and coords[1] > 283 and coords[1] < 592 and coords[1] < 355 and hand.return_hand()[0].return_rank() == hand.return_hand()[1].return_rank() and split == False and len(hand.return_hand()) == 2: #In the Split box and the first two cards are equal and the player hasn't split and the hand has only two cards
-                return "Split"
+        if hand.return_hand()[0].return_rank() == hand.return_hand()[1].return_rank() and split == False and len(hand.return_hand()) == 2 and hand.can_twist(): # If the player has two cards of equal rank, hasn't split, only has two cards in hand and can twist
+            pygame.display.update()
+            event = pygame.event.poll()
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
+                coords = list(event.pos)
+                if coords[0] > 11 and coords[1] > 283 and coords[0] < 120 and coords[1] < 355: # In the Stick box
+                    return "Stick"
+                if coords[0] > 142 and coords[1] > 283 and coords[0] < 251 and coords[1] < 355: # In the Twist box
+                    twist(hand, deck)
+                    return "Twist"
+                if coords[0] > 354 and coords[1] > 283 and coords[0] < 463 and coords[1] < 355: # In the double down box 
+                    return "DoubleDown"
+                if coords[0] > 483 and coords[1] > 283 and coords[1] < 592 and coords[1] < 355: # In the Split box 
+                    return "Split"
+            elif event.type == QUIT:
+                sys.exit()
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE: # pressing escape quits
+                    sys.exit()
+                    
+        elif hand.can_twist() and split == False and len(hand.return_hand()) == 2: # If the player has two cards, can twist and hasn't split
+            surface.blit(blank_surface, (483, 283)) # Draw green rectangle over split button
+            pygame.display.update()
+            event = pygame.event.poll()
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
+                coords = list(event.pos)
+                if coords[0] > 11 and coords[1] > 283 and coords[0] < 120 and coords[1] < 355: # In the Stick box
+                    return "Stick"
+                if coords[0] > 142 and coords[1] > 283 and coords[0] < 251 and coords[1] < 355: # In the Twist box 
+                    twist(hand, deck)
+                    return "Twist"
+                if coords[0] > 354 and coords[1] > 283 and coords[0] < 463 and coords[1] < 355: # In the double down box 
+                    return "DoubleDown"
+            elif event.type == QUIT:
+                sys.exit()
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE: # pressing escape quits
+                    sys.exit()
+                    
+        elif hand.can_twist(): # If the player can twist
+            surface.blit(blank_surface, (483, 283)) # Draw green rectangle over split button
+            surface.blit(blank_surface, (354, 283)) # Draw green rectangle over double down button
+            pygame.display.update()
+            event = pygame.event.poll()
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
+                coords = list(event.pos)
+                if coords[0] > 11 and coords[1] > 283 and coords[0] < 120 and coords[1] < 355: # In the Stick box
+                    return "Stick"
+                if coords[0] > 142 and coords[1] > 283 and coords[0] < 251 and coords[1] < 355: # In the Twist box 
+                    twist(hand, deck)
+                    return "Twist"
+            elif event.type == QUIT:
+                sys.exit()
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE: # pressing escape quits
+                    sys.exit()
+        else: # If the player can only stick
+            surface.blit(blank_surface, (483, 283)) # Draw green rectangle over split button
+            surface.blit(blank_surface, (354, 283)) # Draw green rectangle over double down button
+            surface.blit(blank_surface, (142, 283)) # Draw green rectangle over twist button
+            pygame.display.update()
+            event = pygame.event.poll()
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
+                coords = list(event.pos)
+                if coords[0] > 11 and coords[1] > 283 and coords[0] < 120 and coords[1] < 355: # In the Stick box
+                    return "Stick"
+            elif event.type == QUIT:
+                sys.exit()
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE: # pressing escape quits
+                    sys.exit()
                 
-        elif event.type == QUIT:
-                sys.exit()
-        elif event.type == KEYDOWN:
-            if event.key == K_ESCAPE: # pressing escape quits
-                sys.exit()
+        
 
 def get_bet(upper_limit, lower_limit, chips, font, surface, bet, background, insurance): #Gets the amount player wants to bet
     background_surface = pygame.image.load(background)
@@ -172,11 +229,11 @@ def find_winner(pHand, dHand): #This function checks to see what the outcome of 
 def dealer_decision(hand, coords, surface, deck): #This function will add cards to dealer's hand untill he scores 17 or more
     while True:
         draw_hand(hand, coords, surface, 0.4) #Draw the complete dealer's hand
-        if hand.return_score() > 16: #If the score is 17 or more
+        if hand.return_score() < 17 and len(hand.return_hand()) < 5: #If the score is 17 or more
+                hand.twist(deck)
+        else:
                 time.sleep(1.5)
                 return hand
-        else:
-                hand.twist(deck)
 
 def display_winner(text, font, surface, color): #This functions shows the player how many chips he has lost
     draw_text(text, font, surface, 300, 200, color) #Draw the message

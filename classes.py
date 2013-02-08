@@ -81,7 +81,7 @@ class Hand(object): #The player's hand will be a direct object of this class
         return score  
 
     def can_twist(self):
-        if self.return_score() < 21:
+        if self.return_score() < 21 and len(self.hand) < 5:
             return True
         else:
             return False

@@ -24,10 +24,16 @@ TEXTCOLOR = (255, 255, 255)
 BGCOLOR = (77, 189, 51) 
 
 
-#Setup initial pygame window 
-main_clock = pygame.time.Clock()
-window_surface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+#Draw icon and captions
+icon_surface = pygame.Surface((32, 32))
+icon = pygame.image.load(os.path.join('assets','logo32x32.png'))
+icon_surface.set_colorkey((0,0,0))
+icon_surface.blit(icon, (0,0))
+pygame.display.set_icon(icon_surface)
 pygame.display.set_caption('pyJack')
+
+#Setup initial pygame window 
+window_surface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 pygame.mouse.set_visible(True)
 window_surface.fill(BGCOLOR)
 
@@ -36,7 +42,7 @@ font = pygame.font.SysFont(None, 48)
 
 
 draw_start_screen(font, window_surface, WINDOWWIDTH, WINDOWHEIGHT, TEXTCOLOR) #Display the start screen
-pygame.display.update() #Draw this on the screen
+pygame.display.update() #Draw start screen on the screen
 
 wait_for_player_to_press_key() #Don't begin untill player has pressed a key
 
@@ -51,14 +57,14 @@ while True: #Main loop of game
         # Tells player what has happened and that the game will close
         draw_text("You have run out of chips", font, window_surface, 300, 200, TEXTCOLOR)
         draw_text("The game will now close", pygame.font.SysFont(None, 42), window_surface, 300, 350, TEXTCOLOR)
-        pygame.display.update()
+        pygame.display.update() # Shows text
         time.sleep(2) # Gives player chance to read message
         sys.exit() # Close game
     deck = classes.Deck() # Create the deck
-    #Create the initial hands
+    # Create the initial hands
     player_hand = classes.Hand()
     dealer_hand = classes.DealerHand()
-    #Add 2 cards to each hand
+    # Add 2 cards to each hand
     for i in range(2):
         player_hand.twist(deck)
         dealer_hand.twist(deck)
@@ -69,9 +75,8 @@ while True: #Main loop of game
     background = os.path.join("assets","background.png")
     background_surface = pygame.image.load(background)
     window_surface.blit(background_surface, (0,0))
-    pygame.display.update()
     time.sleep(0.4) # Mimics time taken to deal first card
-    deal_cards(player_hand, dealer_hand, PLAYER_HAND_COORDINATES, DEALER_HAND_COORDINATES, window_surface, 0.4) #Deal cards
+    deal_cards(player_hand, dealer_hand, PLAYER_HAND_COORDINATES, DEALER_HAND_COORDINATES, window_surface, 0.4) # Deal cards
     
     if dealer_hand.return_first_card().return_rank() == 'A': # If the dealer shows an Ace
         window_surface.fill(BGCOLOR) # Fill screen with BGCOLOR
@@ -83,10 +88,16 @@ while True: #Main loop of game
         background_surface = pygame.image.load(background)
         window_surface.blit(background_surface, (0,0))
         
-        insurance_bet = get_bet(int(math.floor(bet/2)), 0, "", font, window_surface, 0, os.path.join("assets","background_insurance.png"), True)
+        insurance_bet = get_bet(int(math.floor(bet/2)), 0, "", font, window_surface, 0, background, True)
         
-        if dealer_hand.return_score() == 21:
+        s = "" #Will hold an "s" if the insurance bet is more than one
+        if bet != 1:
+            s = "s"
+            
+        if dealer_hand.return_score() == 21: # If the dealer has blackjacl
             dealer_blackjack = True
+            
+            #Draw default background
             background = os.path.join("assets", "background.png")
             background_surface = pygame.image.load(background)
             window_surface.blit(background_surface, (0,0))
@@ -95,59 +106,47 @@ while True: #Main loop of game
             draw_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0)
             draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface, 0)
             
-            pygame.display.update()
+            pygame.display.update() # Show hands to player
             time.sleep(1)
             
             window_surface.fill(BGCOLOR) # Fill screen with BGCOLOR
             draw_text("Dealer shows blackjack", font, window_surface, 300, 200, TEXTCOLOR)
-            draw_text("You've won %s chips" % (insurance_bet), font, window_surface, 300, 300, TEXTCOLOR)
+            draw_text("You've won %s chip%s" % (insurance_bet, s), font, window_surface, 300, 300, TEXTCOLOR)
             pygame.display.update()
             player_chips += insurance_bet
             time.sleep(1.5)
             
-        else:
+        else: # If dealer doesn't have blackjack
             dealer_blackjack = False
             window_surface.fill(BGCOLOR) # Fill screen with BGCOLOR
             draw_text("Dealer doesn't have blackjack", font, window_surface, 300, 200, TEXTCOLOR)
-            draw_text("You've lost %s chips" % (insurance_bet), font, window_surface, 300, 300, TEXTCOLOR)
+            draw_text("You've lost %s chip%s" % (insurance_bet, s), font, window_surface, 300, 300, TEXTCOLOR)
             pygame.display.update()
             player_chips -= insurance_bet
             time.sleep(2)
     
-    while True: #Main interface for game
-        #Show the availabe options
-        background = os.path.join("assets", "background_options.png") 
-        background_surface = pygame.image.load(background)
-        window_surface.blit(background_surface, (0,0))
-        #Display hands
+    while True: # Main interface for game
+        # Display hands
         draw_dealer_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0)
         draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface, 0)
         
         pygame.display.update() #Refresh display
         
-        while True: #Let player make a choice
-        
-            #Set default background
-            background = os.path.join("assets","background.png")
-            background_surface = pygame.image.load(background)
-            window_surface.blit(background_surface, (0,0))
-            
-            pygame.display.update()
-            
-            #Show options
+        while True: # Let player make a choice
+            # Show options
             background = os.path.join("assets","background_options.png") 
             background_surface = pygame.image.load(background)
             window_surface.blit(background_surface, (0,0))    
-            #Show hands
+            # Show hands
             draw_dealer_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0)
             draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface, 0)      
-            pygame.display.update() # Refresh display
             
-            choice = get_choice(player_hand, deck, split) #Get choice
+            choice = get_choice(player_hand, deck, split, window_surface) #Get choice
             
             if choice == "Twist":
-                draw_dealer_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0) # Draw dealer's hand
-                pygame.display.update() # Update display
+                #draw_dealer_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0) # Draw dealer's hand
+                #pygame.display.update() # Update display
+                pass
             elif choice == "Stick":
                 break
             elif choice == "DoubleDown":
@@ -196,10 +195,9 @@ while True: #Main loop of game
                 pygame.display.update()
                 
                 while True:
-                    choice = get_choice(player_hand, deck, split)
+                    choice = get_choice(player_hand, deck, split, window_surface)
                     if choice == "Twist":
                         draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface, 0) # Draw player's hand
-                        pygame.display.update() # Update display
                     elif choice == "Stick":
                         break
                         
@@ -221,24 +219,34 @@ while True: #Main loop of game
                 pygame.display.update()
                 
                 while True:
-                    choice = get_choice(player_hand2, deck, split)
+                    choice = get_choice(player_hand2, deck, split, window_surface)
                     if choice == "Twist":
                         draw_hand(player_hand2, PLAYER_HAND2_COORDINATES, window_surface, 0) # Draw player's hand
-                        pygame.display.update() # Update display
                     elif choice == "Stick":
                         break
                 break
         
         if split == False and player_hand.return_score() < 22: # Dealer should only get more cards if player isn't bust and hasn't split
+            background = os.path.join("assets","background.png") 
+            background_surface = pygame.image.load(background)
+            window_surface.blit(background_surface, (0,0))
+            draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface, 0)
+            draw_dealer_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0)
             dealer_hand = dealer_decision(dealer_hand, DEALER_HAND_COORDINATES, window_surface, deck)
         elif split == True: # If player has split
+            background = os.path.join("assets","background_insurance.png") 
+            background_surface = pygame.image.load(background)
+            window_surface.blit(background_surface, (0,0))
+            draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface, 0)
+            draw_hand(player_hand2, PLAYER_HAND2_COORDINATES, window_surface, 0)
+            draw_dealer_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0)
             dealer_hand = dealer_decision(dealer_hand, DEALER_HAND_COORDINATES, window_surface, deck)
         
         s = "" #Will hold an "s" if the bet is more than one
         if bet != 1:
             s = "s"
         
-        if split == False: # If the player hasn't split 
+        if split == False: # If the player hasn't split
             # Get the outcome of the round and change player's chips
             outcome = find_winner(player_hand, dealer_hand)
             window_surface.fill(BGCOLOR)
