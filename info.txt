@@ -1,0 +1,26 @@
+Welcome to pyJack by Matthew Brookes
+
+This is a game of Blackjack made in Python. There are two versions, a command line one as well as a graphical one. 
+
+The latter requires pygame to function and you will not get far without it.
+Pygame is available for download at http://www.pygame.org/download.shtml
+Python is available for download at http://www.python.org/download/releases/2.7.3/
+
+This game is designed for Python 2.7 and Pygame 1.9
+
+Source code is available at https://github.com/mbrookes1304/pyJack
+Feel free to edit the code as it's all open source.
+If you find any bugs please report them to me through my email mbrookes1304@gmail.com or submit a pull request on GitHub.
+
+How to use
+
+There is no need to install anything other than prerequisites Python and Pygame. 
+If you will only be running the command line version there is no need for Pygame.
+
+The graphical version will not work if any files are moved. 
+It is best to move the folder as a whole instead of the individual files to prevent issues.
+
+The two versions are called cmd_blackjack.py and gui_blackjack.py.
+The former works on the python command line and the latter is a graphical version.
+
+Select the file you wish to use and enjoy!

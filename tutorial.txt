@@ -1,0 +1,72 @@
+"Blackjack, also known as twenty-one, is the most widely played casino banking game in the world.
+ Blackjack is a comparing card game between a player and dealer.
+ The object of the game is to reach 21 points or to reach a score higher than the dealer without exceeding 21."
+ --Blackjack wikipedia page
+ 
+pyJack is based on the popular game Blackjack and mimics the experience a player would have at a casino.
+The game includes some rules you may be unfamiliar with if you have never played at a casino and these are explained in this document.
+
+The fundamental principle is to keep adding to your hand until you are close to a score of 21 without exceeding this limit. The game is against a dealer who has this same objective. The winner of each round is the person with the highest scoring hand however there are some exceptions.
+
+Card values:
+
++-----+-----+
+|Rank |Score|
++-----+-----+
+|  K  | 10  |
++-----+-----+
+|  Q  | 10  |
++-----+-----+
+|  J  | 10  |
++-----+-----+
+| 10  | 10  |
++-----+-----+
+| 2-9 | 2-9 |
++-----+-----+
+|  A  |1/11 |
++-----+-----+
+
+King, Queen and Jack all have a score of 10. The cards 2-10 all have the score of their rank e.g. 2 of Spades has a score of 2. Ace however is treated as either 1 or 11. The program automatically treats all aces as 11 however the value is changed to 1 if this prevents the player from being bust.
+
+Game Play:
+
+The game first asks the user to make a bet. The bet must be a whole number between 1 and a limit chosen by the house. The player can also not bet more than the number of chips he has.
+
+Next the player's hand is displayed as well as the dealer's face up card. 
+
+This is where the game may deviate from what you've played before.
+
+Insurance:
+If the dealer shows an Ace you will be asked if you want to place an insurance bet. An insurance bet insures you against the dealer having a blackjack. Blackjack is scoring 21 with only two cards. Your insurance bet is entirely optional and can be upto half of your original bet. If the dealer does show blackjack then you will be paid back your insurance bet otherwise you will lose this bet.
+
+You will then be presented with options depending on the state of your hand and the game.
+
+Stick:
+
+You are happy with your hand and don't want any more cards.
+
+Twist:
+
+You can only do this if your hand has a score of less than 21 and your hand has less than 5 cards in it.
+You will be dealt another card and then prompted to make another choice.
+
+Double Down:
+
+If your hand has only two cards and has a score of less than 21 then you may double down.  
+By doubling down your bet is doubled and you are dealt one extra card. You then automatically split.
+
+Split:
+
+If the two cards you are dealt have an equal rank e.g. two 4s then you may split your hand.
+You will then have two hands, the first cards are the ones from your original hand and then another is automatically added.
+The two hands are treated independently and you will be prompted to stick or twist on each hand. As your hands are seperate you could win on one hand and then lose on the other. 
+
+The dealer:
+
+When you have chosen to stick, the dealer will then make his decision as to whether to stick or twist. As in a casino, the dealer will continue to twist until he reaches a score of 17. At this point he must stick.
+
+The outcome:
+
+Your hand(s) and the dealer's hand are then compare. If you are bust or the dealer has a higher score you lose your bet. If the dealer is bust or you have a higher score then you win your bet. If you have equal scores then you push and neither win nor lose chips. If you score blackjack then you are paid 1.5x your bet.
+
+The game then starts again and you are prompted to make another bet however if you have run out of chips then the game will close. 
