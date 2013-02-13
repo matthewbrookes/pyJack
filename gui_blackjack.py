@@ -37,14 +37,14 @@ window_surface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 pygame.mouse.set_visible(True)
 window_surface.fill(BGCOLOR)
 
-#We want to use the standard system font
+# We want to use the standard system font
 font = pygame.font.SysFont(None, 48)
 
 
-draw_start_screen(font, window_surface, WINDOWWIDTH, WINDOWHEIGHT, TEXTCOLOR) #Display the start screen
-pygame.display.update() #Draw start screen on the screen
+draw_start_screen(font, window_surface, WINDOWWIDTH, WINDOWHEIGHT, TEXTCOLOR) # Display the start screen
+pygame.display.update() # Draw start screen on the screen
 
-wait_for_player_to_press_key() #Don't begin untill player has pressed a key
+wait_for_player_to_press_key(window_surface) # Don't begin untill player has pressed a key
 
  
 
@@ -94,7 +94,7 @@ while True: #Main loop of game
         if bet != 1:
             s = "s"
             
-        if dealer_hand.return_score() == 21: # If the dealer has blackjacl
+        if dealer_hand.return_score() == 21: # If the dealer has blackjack
             dealer_blackjack = True
             
             #Draw default background
@@ -144,8 +144,6 @@ while True: #Main loop of game
             choice = get_choice(player_hand, deck, split, window_surface) #Get choice
             
             if choice == "Twist":
-                #draw_dealer_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0) # Draw dealer's hand
-                #pygame.display.update() # Update display
                 pass
             elif choice == "Stick":
                 break

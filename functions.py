@@ -6,8 +6,9 @@ pygame.init()
 def draw_start_screen(font, surface, w, h, color): #Draws the screen at the very beginning
     draw_text('pyJack', font, surface, (w / 2 ), (h / 5), color)
     draw_text('Press a key to start.', font, surface, w / 2, (h / 3) + 50, color )
+    draw_text("Or press 'H' to show help.", font, surface, w / 2, (h/2), color )
 
-def wait_for_player_to_press_key(): #Game pauses whilst waiting for player to press a key
+def wait_for_player_to_press_key(surface): #Game pauses whilst waiting for player to press a key
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -15,6 +16,8 @@ def wait_for_player_to_press_key(): #Game pauses whilst waiting for player to pr
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE: # pressing escape quits
                     sys.exit()
+                elif event.key == K_h: # pressing h shows help
+                    show_help(surface)
                 return
                 
 def draw_text(text, font, surface, x, y, color): #Draws text with these parameters
@@ -238,6 +241,58 @@ def dealer_decision(hand, coords, surface, deck): #This function will add cards 
 def display_winner(text, font, surface, color): #This functions shows the player how many chips he has lost
     draw_text(text, font, surface, 300, 200, color) #Draw the message
     pygame.display.update()
-    time.sleep(3) #Give the player the chance to see how much they have won/lost
+    time.sleep(3) # Give the player the chance to see how much they have won/lost
+
+def show_help(surface): # Show help    
+    # Creates images and rects
+    tutorial1 = pygame.image.load(os.path.join('assets', 'tutorial1.png'))
+    tutorial1_rect = tutorial1.get_rect()
+    tutorial2 = pygame.image.load(os.path.join('assets', 'tutorial2.png'))
+    tutorial2_rect = tutorial2.get_rect()
+    tutorial3 = pygame.image.load(os.path.join('assets', 'tutorial3.png'))
+    tutorial3_rect = tutorial3.get_rect()
+    tutorial4 = pygame.image.load(os.path.join('assets', 'tutorial4.png'))
+    tutorial4_rect = tutorial4.get_rect()
+    tutorial5 = pygame.image.load(os.path.join('assets', 'tutorial5.png'))
+    tutorial5_rect = tutorial5.get_rect()
+    tutorial6 = pygame.image.load(os.path.join('assets', 'tutorial6.png'))
+    tutorial6_rect = tutorial6.get_rect()
+    tutorial7 = pygame.image.load(os.path.join('assets', 'tutorial7.png'))
+    tutorial7_rect = tutorial7.get_rect()
+    tutorial8 = pygame.image.load(os.path.join('assets', 'tutorial8.png'))
+    tutorial8_rect = tutorial8.get_rect()
+    
+    # Draw each tutorial image and wait for the user to press a key
+    surface.blit(tutorial1, tutorial1_rect)
+    pygame.display.update()
+    wait_for_player_to_press_key(surface)
+    
+    surface.blit(tutorial2, tutorial2_rect)
+    pygame.display.update()
+    wait_for_player_to_press_key(surface)
+    
+    surface.blit(tutorial3, tutorial3_rect)
+    pygame.display.update()
+    wait_for_player_to_press_key(surface)
+    
+    surface.blit(tutorial4, tutorial4_rect)
+    pygame.display.update()
+    wait_for_player_to_press_key(surface)
+    
+    surface.blit(tutorial5, tutorial5_rect)
+    pygame.display.update()
+    wait_for_player_to_press_key(surface)
+    
+    surface.blit(tutorial6, tutorial6_rect)
+    pygame.display.update()
+    wait_for_player_to_press_key(surface)
+    
+    surface.blit(tutorial7, tutorial7_rect)
+    pygame.display.update()
+    wait_for_player_to_press_key(surface)
+    
+    surface.blit(tutorial8, tutorial8_rect)
+    pygame.display.update()
+    wait_for_player_to_press_key(surface)
     
     
