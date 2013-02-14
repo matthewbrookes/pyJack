@@ -145,6 +145,11 @@ def get_choice(hand, deck, split, surface): # Allows the player to choose what t
             elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE: # pressing escape quits
                     sys.exit()
+        
+        elif hand.return_score() > 21: # If the player is bust
+            time.sleep(1)
+            return "Stick" # Auto sticks for the player
+            
         else: # If the player can only stick
             surface.blit(blank_surface, (483, 283)) # Draw green rectangle over split button
             surface.blit(blank_surface, (354, 283)) # Draw green rectangle over double down button
