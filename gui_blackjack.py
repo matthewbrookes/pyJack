@@ -46,6 +46,8 @@ draw_start_screen(font, window_surface, WINDOWWIDTH, WINDOWHEIGHT, TEXTCOLOR)  #
 pygame.display.update()  # Draw start screen on the screen
 
 wait_for_player_to_press_key(window_surface)  # Don't begin untill player has pressed a key
+print get_username(window_surface, "")  # Prompts player for user name
+
 
 # Main body of game
 while True:  # Main loop of game
