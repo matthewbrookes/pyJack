@@ -2,7 +2,6 @@
 import classes, math
 from functions import *
 from pygame.locals import *
-from wx.lib.wxcairo import FontFaceFromFont
 # Start Pygame
 pygame.init()
 
@@ -67,11 +66,8 @@ while True:  # Main loop of game
     dealer_hand = classes.DealerHand()
     # Add 2 cards to each hand
     for i in range(2):
-        # player_hand.twist(deck)
+        player_hand.twist(deck)
         dealer_hand.twist(deck)
-    player_hand.add_card(classes.Card('spades', 'A'))
-    player_hand.add_card(classes.Card('spades', 'K'))
-    
     # Get the bet
     bet = get_bet(HOUSELIMIT, 1, player_chips, font, window_surface, 1, os.path.join("assets", "background_make_bet.png"), False)
     # Draw custom background
