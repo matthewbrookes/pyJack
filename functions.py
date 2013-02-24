@@ -1,7 +1,5 @@
 import sys, time, os, pygame, string, csv
 from pygame.locals import *
-from django.core.files.base import File
-from string import lower
 
 pygame.init()
 
@@ -14,12 +12,12 @@ def wait_for_player_to_press_key(surface):  # Game pauses whilst waiting for pla
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
+                pygame.quit()
                 sys.exit()
-                os._exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:  # pressing escape quits
+                    pygame.quit()
                     sys.exit()
-                    os._exit()
                 elif event.key == K_h:  # pressing h shows help
                     show_help(surface)
                 return
@@ -108,12 +106,12 @@ def get_choice(hand, deck, split, surface):  # Allows the player to choose what 
                 if coords[0] > 483 and coords[1] > 283 and coords[1] < 592 and coords[1] < 355:  # In the Split box
                     return "Split"
             elif event.type == QUIT:
+                pygame.quit()
                 sys.exit()
-                os._exit()
             elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE:  # pressing escape quits
+                    pygame.quit()
                     sys.exit()
-                    os._exit()
 
         elif hand.can_twist() and split == False and len(hand.return_hand()) == 2:  # If the player has two cards, can twist and hasn't split
             surface.blit(blank_surface, (483, 283))  # Draw green rectangle over split button
@@ -129,12 +127,12 @@ def get_choice(hand, deck, split, surface):  # Allows the player to choose what 
                 if coords[0] > 354 and coords[1] > 283 and coords[0] < 463 and coords[1] < 355:  # In the double down box
                     return "DoubleDown"
             elif event.type == QUIT:
+                pygame.quit()
                 sys.exit()
-                os._exit()
             elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE:  # pressing escape quits
+                    pygame.quit()
                     sys.exit()
-                    os._exit()
 
         elif hand.can_twist():  # If the player can twist
             surface.blit(blank_surface, (483, 283))  # Draw green rectangle over split button
@@ -149,12 +147,12 @@ def get_choice(hand, deck, split, surface):  # Allows the player to choose what 
                     twist(hand, deck)
                     return "Twist"
             elif event.type == QUIT:
+                pygame.quit()
                 sys.exit()
-                os._exit()
             elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE:  # pressing escape quits
+                    pygame.quit()
                     sys.exit()
-                    os._exit()
 
         elif hand.return_score() > 21:  # If the player is bust
             time.sleep(1)
@@ -171,12 +169,12 @@ def get_choice(hand, deck, split, surface):  # Allows the player to choose what 
                 if coords[0] > 11 and coords[1] > 283 and coords[0] < 120 and coords[1] < 355:  # In the Stick box
                     return "Stick"
             elif event.type == QUIT:
+                pygame.quit()
                 sys.exit()
-                os._exit()
             elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE:  # pressing escape quits
+                    pygame.quit()
                     sys.exit()
-                    os._exit()
 
 
 
@@ -222,12 +220,12 @@ def get_bet(upper_limit, lower_limit, chips, font, surface, bet, background, ins
                 return bet
                 break
         elif event.type == QUIT:
-                sys.exit()
-                os._exit()
+            pygame.quit()
+            sys.exit()
         elif event.type == KEYDOWN:
             if event.key == K_ESCAPE:  # pressing escape quits
+                pygame.quit()
                 sys.exit()
-                os._exit()
     # time.sleep(2)
 
 def twist(hand, deck):  # Function when twist box is pressed
@@ -346,8 +344,8 @@ def get_username(screen, question):  # Get player to enter a username
         elif inkey.key == K_RETURN:  # If key is return
             break  # Break loop
         elif inkey.key == K_ESCAPE:  # If key is escape
-            sys.exit()  # Quit program
-            os._exit()
+            pygame.quit()
+            sys.exit()
         elif is_valid_letter(inkey.key) and len(current_string) < 10:  # If key is a valid letter and username is less than 10 letters
             current_string.append(inkey.unicode)  # Add the unicode letter from the key
         enter_username_box(screen, question + "" + string.join(current_string, ""))  # Prompt user for next letter
