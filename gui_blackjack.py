@@ -5,12 +5,7 @@ from pygame.locals import *
 # Start Pygame
 pygame.init()
 
-# Create variables for game
-deck = []
-player_hand = []
-player_hand2 = []
-dealer_hand = []
-player_chips = 400
+
 # Create constants
 HOUSELIMIT = 80
 # These three are the coordinates where images should be placed
@@ -44,12 +39,12 @@ font = pygame.font.Font(FONTFACE, 36)
 draw_start_screen(font, window_surface, WINDOWWIDTH, WINDOWHEIGHT, TEXTCOLOR)  # Display the start screen
 pygame.display.update()  # Draw start screen on the screen
 
-wait_for_player_to_press_key(window_surface)  # Don't begin untill player has pressed a key
-print get_username(window_surface, "")  # Prompts player for user name
-
-
+wait_for_player_to_press_key(window_surface)  # Don't begin until player has pressed a key
+username = get_username(window_surface, "")  # Prompts player for user name
+player_chips = get_chips(username)
 # Main body of game
 while True:  # Main loop of game
+    save_chips(username, player_chips)  # Saves the player's chips at start of each turn
     split = False
     dealer_blackjack = False  # Will be true if the dealer has a blackjack on his first two cards
     if player_chips < 1:  # If the player has less than 1 chips
@@ -63,6 +58,7 @@ while True:  # Main loop of game
     deck = classes.Deck()  # Create the deck
     # Create the initial hands
     player_hand = classes.Hand()
+    player_hand2 = classes.Hand()
     dealer_hand = classes.DealerHand()
     # Add 2 cards to each hand
     for i in range(2):

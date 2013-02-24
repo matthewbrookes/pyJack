@@ -1,5 +1,7 @@
-import sys, time, os, pygame, string
+import sys, time, os, pygame, string, csv
 from pygame.locals import *
+from django.core.files.base import File
+from string import lower
 
 pygame.init()
 
@@ -313,16 +315,16 @@ def show_help(surface):  # Show help
     wait_for_player_to_press_key(surface)
 
 def enter_username_box(screen, message):  # Displays a box for the player to enter a user name
-    fontobject = pygame.font.Font(os.path.join('assets', 'font.ttf'), 42)  # Creates a new font
-    screen.fill((77, 189, 51))
-    draw_text('pyJack', fontobject, screen, (screen.get_width() / 2), (screen.get_height() / 5), (255, 255, 255))
+    fontobject = pygame.font.Font(os.path.join('assets', 'font.ttf'), 36)  # Creates a new font
+    screen.fill((77, 189, 51))  # Fill screen green
+    draw_text('pyJack', fontobject, screen, (screen.get_width() / 2), (screen.get_height() / 5), (255, 255, 255))  # Draw title
     draw_text('Enter a username:', fontobject, screen, (screen.get_width() / 2), (screen.get_height() / 3 - 30), (255, 255, 255))
     pygame.draw.rect(screen, (77, 189, 51),
                    ((screen.get_width() / 2) - 225,
                     (screen.get_height() / 2) - 10,
                     450, 25), 0)  # Draws field where user will enter name
     if len(message) != 0:  # If there is a message
-        message_size = list(fontobject.size(message))
+        message_size = list(fontobject.size(message))  # How much space the message wil take up
         screen.blit(fontobject.render(message, 1, (255, 255, 255)), ((screen.get_width() / 2 - (message_size[0] / 2)), (screen.get_height() / 4) + 50))  # Draw message in user name field
     pygame.display.flip()
 
@@ -334,28 +336,63 @@ def get_key():  # Gets a key from the player
         else:
             pass
 
-def get_username(screen, question):
-    pygame.font.init()
-    current_string = []
-    enter_username_box(screen, question + "" + string.join(current_string, ""))
-    while 1:
-        inkey = get_key()
-        if inkey.key == K_BACKSPACE:
-            current_string = current_string[0:-1]
-        elif inkey.key == K_RETURN:
-            break
-        elif inkey.key == K_ESCAPE:
-            sys.exit()
+def get_username(screen, question):  # Get player to enter a username
+    current_string = []  # List holds the username letters
+    enter_username_box(screen, question + "" + string.join(current_string, ""))  # Draw username box
+    while True:  # Continuous loop
+        inkey = get_key()  # Get key press
+        if inkey.key == K_BACKSPACE:  # If key is backspace
+            current_string = current_string[0:-1]  # Delete last letter
+        elif inkey.key == K_RETURN:  # If key is return
+            break  # Break loop
+        elif inkey.key == K_ESCAPE:  # If key is escape
+            sys.exit()  # Quit program
             os._exit()
-        elif is_valid_letter(inkey.key) and len(current_string) < 10:
-            current_string.append(inkey.unicode)
-        enter_username_box(screen, question + "" + string.join(current_string, ""))
-    return string.join(current_string, "")
+        elif is_valid_letter(inkey.key) and len(current_string) < 10:  # If key is a valid letter and username is less than 10 letters
+            current_string.append(inkey.unicode)  # Add the unicode letter from the key
+        enter_username_box(screen, question + "" + string.join(current_string, ""))  # Prompt user for next letter
+    return string.join(current_string, "")  # Return username as string
 
-def is_valid_letter(key):
-    if key > 96 and key < 123:
+def is_valid_letter(key):  # Checks the key was a valid letter
+    if key > 96 and key < 123:  # If it's a capital letter
         return True
-    elif key > 140 and key < 173:
+    elif key > 140 and key < 173:  # If it's a lowercase letter
         return True
-    else:
+    else:  # If it's not a letter
         return False
+
+def get_chips(username):  # Gets the number of chips from file 
+    try:  # Attempt to open the save file
+        save_file = open('scores.csv', 'r')  # Opens the save file for reading
+    except IOError:  # If the file doesn't exist
+        new_file = open('scores.csv', 'w')  # Creates a file called scores.csv
+        new_file.close()  # Close the file
+        save_file = open('scores.csv', 'r')  # Opens the save file for reading
+    finally:  # When the file is opened
+        reader = csv.reader(save_file)  # Creates a CSV reader
+        for row in reader:
+            if row[0] == username.lower():  # If the first column in the row is equal to the username
+                return int(row[1])  # Return the corresponding chip amount
+        return 400  # If it's a new username return 400
+        save_file.close()  # Close file
+
+def save_chips(username, chips):  # Writes the number of chips to file
+    read_save_file = open('scores.csv', 'r')  # Opens save file for reading
+    reader = csv.reader(read_save_file)  # Creates CSV reader
+    
+    lines = [l for l in reader]  # Creates array of lines in file
+    read_save_file.close()  # Close file
+    
+    current_character = False  # Boolean shows if the character already exists
+    for i in range(len(lines)):  # Iterates over each line
+        if lines[i][0] == username.lower():  # If the line corresponds to the username
+            lines[i][1] = chips  # Change the chip value to new one
+            current_character = True  # The character obviously exists
+    
+    if current_character == False:  # If the character doesn't exist
+        lines.append([username.lower(), chips])  # Add the new character and chip value
+        
+    write_save_file = open('scores.csv', 'w')  # Opens file for writing
+    writer = csv.writer(write_save_file)  # Creates CSV writer
+    writer.writerows(lines)  # Writes the rows
+    write_save_file.close()  # Closes file
