@@ -1,5 +1,6 @@
 import sys, time, os, pygame, string, csv
 from pygame.locals import *
+from pygame import surface
 
 pygame.init()
 
@@ -88,10 +89,9 @@ def deal_cards(p_hand, d_hand, p_coords, d_coords, surface, pause):  # Deals the
     draw_hand(p_hand, p_coords, surface, pause)
 
 def get_choice(hand, deck, split, surface):  # Allows the player to choose what to do
-    blank_surface = pygame.Surface((111, 74))
-    blank_surface.fill((77, 189, 51))
     while True:
         if hand.return_hand()[0].return_rank() == hand.return_hand()[1].return_rank() and split == False and len(hand.return_hand()) == 2 and hand.can_twist():  # If the player has two cards of equal rank, hasn't split, only has two cards in hand and can twist
+            draw_options([0, 1, 2, 3], surface)  # Draw all 4 options
             pygame.display.update()
             event = pygame.event.poll()
             if event.type == MOUSEBUTTONDOWN and event.button == 1:
@@ -114,8 +114,7 @@ def get_choice(hand, deck, split, surface):  # Allows the player to choose what 
                     sys.exit()
 
         elif hand.can_twist() and split == False and len(hand.return_hand()) == 2:  # If the player has two cards, can twist and hasn't split
-            surface.blit(blank_surface, (483, 283))  # Draw green rectangle over split button
-            pygame.display.update()
+            draw_options([0, 1, 2], surface)  # Draw 3 options
             event = pygame.event.poll()
             if event.type == MOUSEBUTTONDOWN and event.button == 1:
                 coords = list(event.pos)
@@ -135,9 +134,7 @@ def get_choice(hand, deck, split, surface):  # Allows the player to choose what 
                     sys.exit()
 
         elif hand.can_twist():  # If the player can twist
-            surface.blit(blank_surface, (483, 283))  # Draw green rectangle over split button
-            surface.blit(blank_surface, (354, 283))  # Draw green rectangle over double down button
-            pygame.display.update()
+            draw_options([0, 1], surface)  # Draw 2 options
             event = pygame.event.poll()
             if event.type == MOUSEBUTTONDOWN and event.button == 1:
                 coords = list(event.pos)
@@ -159,9 +156,6 @@ def get_choice(hand, deck, split, surface):  # Allows the player to choose what 
             return "Stick"  # Auto sticks for the player
 
         else:  # If the player can only stick
-            surface.blit(blank_surface, (483, 283))  # Draw green rectangle over split button
-            surface.blit(blank_surface, (354, 283))  # Draw green rectangle over double down button
-            surface.blit(blank_surface, (142, 283))  # Draw green rectangle over twist button
             pygame.display.update()
             event = pygame.event.poll()
             if event.type == MOUSEBUTTONDOWN and event.button == 1:
@@ -394,3 +388,32 @@ def save_chips(username, chips):  # Writes the number of chips to file
     writer = csv.writer(write_save_file)  # Creates CSV writer
     writer.writerows(lines)  # Writes the rows
     write_save_file.close()  # Closes file
+    
+def draw_options(options, surface):  # Draws the options on screen 
+    stick_option = pygame.image.load(os.path.join('assets', 'stick.png'))  # Loads the stick button image 
+    stick_rect = stick_option.get_rect()  # Creates a rect from this image
+    stick_rect.topleft = (11, 283)  # Sets the top left of the image to this point on the screen
+    twist_option = pygame.image.load(os.path.join('assets', 'twist.png')) 
+    twist_rect = twist_option.get_rect()
+    twist_rect.topleft = (142, 283)
+    double_down_option = pygame.image.load(os.path.join('assets', 'doubledown.png')) 
+    double_down_rect = double_down_option.get_rect()
+    double_down_rect.topleft = (354, 283)
+    split_option = pygame.image.load(os.path.join('assets', 'split.png')) 
+    split_rect = split_option.get_rect()
+    split_rect.topleft = (483, 283)
+    
+    if len(options) == 2:  # If the array has two values
+        surface.blit(stick_option, stick_rect)  # Draw the stick button
+        surface.blit(twist_option, twist_rect)  # Draw the twist button
+    elif len(options) == 3:  # If the array has three values
+        surface.blit(stick_option, stick_rect)
+        surface.blit(twist_option, twist_rect)
+        surface.blit(double_down_option, double_down_rect)  # Draw the double down button
+    elif len(options) == 4:  # If the array has four values
+        surface.blit(stick_option, stick_rect)
+        surface.blit(twist_option, twist_rect)
+        surface.blit(double_down_option, double_down_rect)
+        surface.blit(split_option, split_rect)  # Draw the split button
+        
+    pygame.display.update()  # Update the display
