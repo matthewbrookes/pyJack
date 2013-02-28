@@ -1,6 +1,5 @@
 import sys, time, os, pygame, string, csv
 from pygame.locals import *
-from pygame import surface
 
 pygame.init()
 
@@ -175,11 +174,15 @@ def get_choice(hand, deck, split, surface):  # Allows the player to choose what 
 def get_bet(upper_limit, lower_limit, chips, font, surface, bet, background, insurance):  # Gets the amount player wants to bet
     background_surface = pygame.image.load(background)
     surface.blit(background_surface, (0, 0))
+    draw_text("Bet:", font, surface, 68, 207, (255, 255, 255))  # Draws label
     draw_text(str(chips), font, surface, 160, 157, (255, 255, 255))  # Display number of chips
     if insurance == False:
         draw_text(str(upper_limit), font, surface, 473, 157, (255, 255, 255))  # Displays upper_limit
+        draw_text("Limit:", font, surface, 381, 157, (255, 255, 255))  # Draws label
+        draw_text("Chips:", font, surface, 68, 157, (255, 255, 255))  # Draws label
     else:
         draw_text(str(upper_limit), font, surface, 473, 207, (255, 255, 255))  # Displays upper_limit
+        draw_text("Limit:", font, surface, 381, 207, (255, 255, 255))  # Draws label
     draw_text(str(bet), font, surface, 160, 207, (255, 255, 255))  # Displays bet
     pygame.display.update()
     while True:
@@ -385,7 +388,7 @@ def save_chips(username, chips):  # Writes the number of chips to file
                 del new_lines[i]
     
     if current_character == False:  # If the character doesn't exist
-        lines.append([username.lower(), chips])  # Add the new character and chip value
+        new_lines.append([username.lower(), chips])  # Add the new character and chip value
     write_save_file = open('scores.csv', 'w')  # Opens file for writing
     writer = csv.writer(write_save_file)  # Creates CSV writer
     writer.writerows(new_lines)  # Writes the rows
