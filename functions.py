@@ -376,17 +376,19 @@ def save_chips(username, chips):  # Writes the number of chips to file
     read_save_file.close()  # Close file
     
     current_character = False  # Boolean shows if the character already exists
+    new_lines = list(lines)
     for i in range(len(lines)):  # Iterates over each line
         if lines[i][0] == username.lower():  # If the line corresponds to the username
-            lines[i][1] = chips  # Change the chip value to new one
+            new_lines[i][1] = chips  # Change the chip value to new one
             current_character = True  # The character obviously exists
+            if chips == 0:
+                del new_lines[i]
     
     if current_character == False:  # If the character doesn't exist
         lines.append([username.lower(), chips])  # Add the new character and chip value
-        
     write_save_file = open('scores.csv', 'w')  # Opens file for writing
     writer = csv.writer(write_save_file)  # Creates CSV writer
-    writer.writerows(lines)  # Writes the rows
+    writer.writerows(new_lines)  # Writes the rows
     write_save_file.close()  # Closes file
     
 def draw_options(options, surface):  # Draws the options on screen 
