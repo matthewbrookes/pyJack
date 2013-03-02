@@ -140,7 +140,7 @@ while True:  # Main loop of game
             draw_dealer_hand(dealer_hand, DEALER_HAND_COORDINATES, window_surface, 0)
             draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface, 0)
 
-            choice = get_choice(player_hand, deck, split, window_surface)  # Get choice
+            choice = get_choice(player_hand, deck, split, window_surface, bet, player_chips)  # Get choice
 
             if choice == "Twist":
                 pass
@@ -192,7 +192,7 @@ while True:  # Main loop of game
                 pygame.display.update()
 
                 while True:
-                    choice = get_choice(player_hand, deck, split, window_surface)
+                    choice = get_choice(player_hand, deck, split, window_surface, bet, player_chips)
                     if choice == "Twist":
                         draw_hand(player_hand, PLAYER_HAND_COORDINATES, window_surface, 0)  # Draw player's hand
                     elif choice == "Stick":
@@ -216,7 +216,7 @@ while True:  # Main loop of game
                 pygame.display.update()
 
                 while True:
-                    choice = get_choice(player_hand2, deck, split, window_surface)
+                    choice = get_choice(player_hand2, deck, split, window_surface, bet, player_chips)
                     if choice == "Twist":
                         draw_hand(player_hand2, PLAYER_HAND2_COORDINATES, window_surface, 0)  # Draw player's hand
                     elif choice == "Stick":

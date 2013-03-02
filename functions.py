@@ -87,7 +87,7 @@ def deal_cards(p_hand, d_hand, p_coords, d_coords, surface, pause):  # Deals the
     # Show the player's cards
     draw_hand(p_hand, p_coords, surface, pause)
 
-def get_choice(hand, deck, split, surface):  # Allows the player to choose what to do
+def get_choice(hand, deck, split, surface, bet, chips):  # Allows the player to choose what to do
     while True:
         if hand.return_hand()[0].return_rank() == hand.return_hand()[1].return_rank() and split == False and len(hand.return_hand()) == 2 and hand.can_twist():  # If the player has two cards of equal rank, hasn't split, only has two cards in hand and can twist
             draw_options([0, 1, 2, 3], surface)  # Draw all 4 options
@@ -112,7 +112,7 @@ def get_choice(hand, deck, split, surface):  # Allows the player to choose what 
                     pygame.quit()
                     sys.exit()
 
-        elif hand.can_twist() and split == False and len(hand.return_hand()) == 2:  # If the player has two cards, can twist and hasn't split
+        elif hand.can_twist() and split == False and len(hand.return_hand()) == 2 and bet * 2 <= chips:  # If the player has two cards, can twist and hasn't split
             draw_options([0, 1, 2], surface)  # Draw 3 options
             event = pygame.event.poll()
             if event.type == MOUSEBUTTONDOWN and event.button == 1:
